@@ -1,7 +1,5 @@
-# IntellijIdea files
+
 *.iml
-.idea
-out
 # Log file
 *.log
 
