@@ -11,12 +11,16 @@
     <modules>
         <module>hw01maven</module>
     </modules>
+    <properties>
+        <com.google.guava.version>27.1-jre</com.google.guava.version>
+        <my.variable>42</my.variable>
+    </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>27.0.1-jre</version>
+                <version>${com.google.guava.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
