@@ -1,3 +1,7 @@
+package ru.otus;
+
+import ru.otus.DIYArrayList;
+
 import java.util.*;
 
 
