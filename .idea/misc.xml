@@ -9,6 +9,7 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/hw02_DIY ArrayList/pom.xml" />
+        <option value="$PROJECT_DIR$/hw03_testframework/pom.xml" />
       </set>
     </option>
   </component>
