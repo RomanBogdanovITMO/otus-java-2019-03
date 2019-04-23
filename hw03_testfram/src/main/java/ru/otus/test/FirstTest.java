@@ -4,6 +4,8 @@ import ru.otus.annotation.After;
 import ru.otus.annotation.Before;
 import ru.otus.annotation.Test;
 
+import java.lang.reflect.InvocationTargetException;
+
 public class FirstTest {
     @Before
     public void beforeTest(){
@@ -13,6 +15,11 @@ public class FirstTest {
     @Test
     public void test(){
         System.out.println("Method: Test");
+    }
+    @Test
+    public void test2(){
+        System.out.println("test2");
+        throw new RuntimeException();
     }
 
     @Test

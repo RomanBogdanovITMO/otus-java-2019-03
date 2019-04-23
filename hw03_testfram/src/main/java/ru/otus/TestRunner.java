@@ -38,12 +38,12 @@ public class TestRunner {
                 return;
             }
 
-            int countTest = 0;
+            int succssefulTest = 0;
 
             for (Method testMethod : testMethods) {
                 try {
                     Object testObject = testClass.getDeclaredConstructor().newInstance();
-                    countTest++;
+                    succssefulTest++;
 
                     for (Method method : beforeMethods) {
                         method.invoke(testObject);
@@ -56,7 +56,7 @@ public class TestRunner {
                     }
                 } catch (Exception e) {
                     System.out.println("filed " + e);
-                    countTest--;
+                    succssefulTest--;
                 }
             }
 
