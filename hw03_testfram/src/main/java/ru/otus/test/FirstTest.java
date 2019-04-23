@@ -17,7 +17,7 @@ public class FirstTest {
 
     @Test
     public void test2(){
-        System.out.println("method: test2");
+        System.out.println("test2");
         throw new RuntimeException();
     }
 
