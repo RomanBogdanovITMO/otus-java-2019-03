@@ -2,7 +2,10 @@ package ru.otus;
 
 public class Demo implements MyinterfacClass  {
 
-    public void print(String str) {
-        System.out.println(str);
+    @Override
+    public void calcul(int number) {
+        System.out.println(number);
     }
+
+
 }

@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
+import java.util.logging.Logger;
 
 
 public class MyAop {
@@ -18,21 +19,17 @@ public class MyAop {
 
     static class DemoInvocationHandler implements InvocationHandler {
 
+
         private final MyinterfacClass myClass;
 
-        DemoInvocationHandler(MyinterfacClass myClass) {
+       DemoInvocationHandler(MyinterfacClass myClass) {
             this.myClass = myClass;
         }
 
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            Class<?> testClass = Class.forName("ru.otus.TestLogging");
-
-            Method[] methods = testClass.getDeclaredMethods();
+            Class<?>clazz = method.getDeclaringClass();
+            Method[] methods = clazz.getMethods();
             Parameter[] parameters = null;
-
-            System.out.println(testClass);
-            System.out.println(methods);
-
             for (Method method1 : methods) {
                 Annotation[] annotations = method1.getDeclaredAnnotations();
                 for (Annotation annotation : annotations) {
@@ -50,11 +47,5 @@ public class MyAop {
             return method.invoke(myClass, args);
         }
 
-        @Override
-        public String toString() {
-            return "DemoInvocationHandler{" +
-                    "myClass=" + myClass +
-                    '}';
-        }
     }
 }
