@@ -3,8 +3,8 @@ package ru.otus;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
+import java.util.*;
 
 
 public class MyAop {
@@ -19,44 +19,32 @@ public class MyAop {
     static class DemoInvocationHandler implements InvocationHandler {
 
         private final MyinterfacClass myClass;
-        private int parametMethod;
-        private String nameMethod;
+        private Set<Method> setMethods;
 
 
         DemoInvocationHandler(MyinterfacClass myClass) {
             this.myClass = myClass;
 
             Class<?> clazz = myClass.getClass();
-            Method[] methods = clazz.getMethods();
-            Parameter[] parameters = null;
-            for (Method method1 : methods) {
-
-                Annotation[] annotations = method1.getDeclaredAnnotations();
-
+            setMethods = new HashSet<>();
+            Method[] methods = clazz.getDeclaredMethods();
+            for (Method method : methods) {
+                Annotation[] annotations = method.getDeclaredAnnotations();
                 for (Annotation annotation : annotations) {
                     if (annotation instanceof log) {
-
-                        parameters = method1.getParameters();
-
-                        for (Parameter parameter : parameters) {
-
-                            nameMethod = method1.getName();
-                            parametMethod = parameter.getModifiers();
-
-                        }
+                        setMethods.add(method);
                     }
                 }
             }
-
-
         }
 
-
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
-            System.out.println("executed method: " + nameMethod + ", param:" + parametMethod);
-            System.out.println("____________");
-
+            for (Method method1 : setMethods) {
+                if (method1.getName().equals(method.getName())) {
+                    System.out.println("executed method: " + method1.getName() + ", param:" + method1.getParameterCount());
+                    System.out.println("____________");
+                }
+            }
             return method.invoke(myClass, args);
         }
 
