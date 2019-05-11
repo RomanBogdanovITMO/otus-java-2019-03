@@ -1,7 +1,6 @@
 package ru.otus;
 
 public class Demo implements MyinterfacClass  {
-
     @log
     @Override
     public void calcul1(int number) {
