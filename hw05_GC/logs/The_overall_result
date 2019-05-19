@@ -3,10 +3,10 @@
 -Xloggc:./hw05_GC/logs/SerialGC.log
 
 Printing GC stats once a minute:
-Young Generation. Name : Copy, Count 6, Total duration : 320 ms, Avg duration : 53 ms
+Young Generation. Name : Copy, Count 6, Total duration : 320 ms, Avg duration : 53 ms // 6 = 373
 Printing GC stats once a minute:
-Young Generation. Name : Copy, Count 4, Total duration : 72 ms, Avg duration : 18 ms
-Old Generation. Name : MarkSweepCompact, Count 4, Total duration : 736 ms, Avg duration : 184 ms
+Young Generation. Name : Copy, Count 4, Total duration : 72 ms, Avg duration : 18 ms // 4 = 90
+Old Generation. Name : MarkSweepCompact, Count 4, Total duration : 736 ms, Avg duration : 184 ms//4 = 920
 _____________________________________________________________________________________________________
 
 -Xmx256m -Xms256m -XX:+UseParallelGC
@@ -14,11 +14,11 @@ ________________________________________________________________________________
 -Xloggc:./hw05_GC/logs/ParallelGC.log
 
 Printing GC stats once a minute:
-Young Generation. Name : PS Scavenge, Count 8, Total duration : 491 ms, Avg duration : 61 ms
-Old Generation. Name : PS MarkSweep, Count 1, Total duration : 145 ms, Avg duration : 145 ms
+Young Generation. Name : PS Scavenge, Count 8, Total duration : 491 ms, Avg duration : 61 ms // 552
+Old Generation. Name : PS MarkSweep, Count 1, Total duration : 145 ms, Avg duration : 145 ms // 290
 Printing GC stats once a minute:
-Young Generation. Name : PS Scavenge, Count 5, Total duration : 365 ms, Avg duration : 73 ms
-Old Generation. Name : PS MarkSweep, Count 27, Total duration : 7491 ms, Avg duration : 277 ms
+Young Generation. Name : PS Scavenge, Count 5, Total duration : 365 ms, Avg duration : 73 ms// 5 = 438
+Old Generation. Name : PS MarkSweep, Count 27, Total duration : 7491 ms, Avg duration : 277 ms // 27 = 7768
 _____________________________________________________________________________________________________
 
 -Xmx256m -Xms256m -XX:+UseConcMarkSweepGC
@@ -26,8 +26,11 @@ ________________________________________________________________________________
 -Xloggc:./hw05_GC/logs/ConcMarkSweepGC.log
 
 Printing GC stats once a minute:
-Young Generation. Name : ParNew, Count 8, Total duration : 349 ms, Avg duration : 43 ms
-Old Generation. Name : ConcurrentMarkSweep, Count 1, Total duration : 38 ms, Avg duration : 38 ms
+Young Generation. Name : ParNew, Count 8, Total duration : 349 ms, Avg duration : 43 ms // 392
+Old Generation. Name : ConcurrentMarkSweep, Count 1, Total duration : 38 ms, Avg duration : 38 ms // 76
 Printing GC stats once a minute:
-Young Generation. Name : ParNew, Count 8, Total duration : 330 ms, Avg duration : 41 ms
-Old Generation. Name : ConcurrentMarkSweep, Count 18, Total duration : 12443 ms, Avg duration : 691 ms
+Young Generation. Name : ParNew, Count 8, Total duration : 330 ms, Avg duration : 41 ms // 8 = 371
+Old Generation. Name : ConcurrentMarkSweep, Count 18, Total duration : 12443 ms, Avg duration : 691 ms //18 = 13134
+___________________________________________________________________________________________________
+
+Более оптимальным вариантом по количеству сборок и количеству времени на сборку это ParallelGC.
