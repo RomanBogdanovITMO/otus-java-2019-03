@@ -12,6 +12,10 @@
         <module>hw01maven</module>
         <module>hw02_DIYArrayList</module>
         <module>hw03_testfram</module>
+        <module>hw04_byteCode</module>
+        <module>hw05_GC</module>
+        <module>hw06_ATM</module>
+
 
     </modules>
     <properties>
