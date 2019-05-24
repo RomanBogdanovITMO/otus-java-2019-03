@@ -2,7 +2,7 @@ package ru.otus;
 
 import java.util.Map;
 
-public class AcceptMoney implements operation {
+public class AcceptMoney implements Operation {
     @Override
     public void action(String title, int money,Map<Integer,Integer> map) {
         int count = 0;
