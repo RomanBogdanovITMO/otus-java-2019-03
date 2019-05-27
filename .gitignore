@@ -1,4 +1,5 @@
 *.iml
+ hw07_ATM_Departament
 .ide
 
 # User-specific stuff
@@ -64,3 +65,5 @@ fabric.properties
 
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
+
+ hw01-maven
