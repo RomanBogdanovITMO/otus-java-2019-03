@@ -1,5 +1,9 @@
 *.iml
  hw07_ATM_Departament
+ hw07_ATM_Departament
+
+ hw03-testFramework
+ hw01-maven
 .ide
 
 # User-specific stuff
