@@ -12,7 +12,7 @@ public class FirstTest {
 
     @Test
     public void test(){
-        System.out.println("method: test");
+        System.out.println("method: test" );
     }
 
     @Test
