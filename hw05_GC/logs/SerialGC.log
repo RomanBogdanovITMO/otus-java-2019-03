@@ -1,0 +1,15 @@
+Java HotSpot(TM) Client VM (25.144-b01) for windows-x86 JRE (1.8.0_144-b01), built on Jul 21 2017 21:58:05 by "java_re" with MS VC++ 10.0 (VS2010)
+Memory: 4k page, physical 2056828k(526320k free), swap 4113656k(1572888k free)
+CommandLine flags: -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./hw05_GC/logs/dump -XX:InitialHeapSize=268435456 -XX:MaxHeapSize=268435456 -XX:+PrintGC -XX:+PrintGCTimeStamps -XX:-UseLargePagesIndividualAllocation -XX:+UseSerialGC 
+10.444: [GC (Allocation Failure)  69952K->17445K(253440K), 0.0269111 secs]
+18.776: [GC (Allocation Failure)  87397K->42712K(253440K), 0.0460643 secs]
+28.075: [GC (Allocation Failure)  112664K->69141K(253440K), 0.0515306 secs]
+37.649: [GC (Allocation Failure)  139093K->102020K(253440K), 0.0645867 secs]
+46.818: [GC (Allocation Failure)  171972K->136948K(253440K), 0.0769910 secs]
+56.445: [GC (Allocation Failure)  206900K->172073K(253440K), 0.0520289 secs]
+66.165: [Full GC (Allocation Failure)  242025K->130108K(253440K), 0.1399549 secs]
+77.476: [GC (Allocation Failure)  200060K->165145K(253440K), 0.0718928 secs]
+86.716: [Full GC (Allocation Failure)  235097K->166095K(253440K), 0.1725949 secs]
+100.386: [Full GC (Allocation Failure)  236047K->182940K(253440K), 0.2237032 secs]
+112.194: [Full GC (Allocation Failure)  253438K->191568K(253440K), 0.1992531 secs]
+121.660: [Full GC (Allocation Failure)  253438K->215359K(253440K), 0.2964910 secs]

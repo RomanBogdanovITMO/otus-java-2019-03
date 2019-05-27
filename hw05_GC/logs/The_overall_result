@@ -1,0 +1,37 @@
+-Xmx256m -Xms256m -XX:+UseSerialGC
+-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./hw05_GC/logs/dump
+-Xloggc:./hw05_GC/logs/SerialGC.log
+
+Printing GC stats once a minute:
+Young Generation. Name : Copy, Count 6, Total duration : 320 ms, Avg duration : 53 ms
+Printing GC stats once a minute:
+Young Generation. Name : Copy, Count 4, Total duration : 72 ms, Avg duration : 18 ms
+Old Generation. Name : MarkSweepCompact, Count 4, Total duration : 736 ms, Avg duration : 184 ms
+_____________________________________________________________________________________________________
+
+-Xmx256m -Xms256m -XX:+UseParallelGC
+-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./hw05_GC/logs/dump
+-Xloggc:./hw05_GC/logs/ParallelGC.log
+
+Printing GC stats once a minute:
+Young Generation. Name : PS Scavenge, Count 8, Total duration : 491 ms, Avg duration : 61 ms
+Old Generation. Name : PS MarkSweep, Count 1, Total duration : 145 ms, Avg duration : 145 ms
+Printing GC stats once a minute:
+Young Generation. Name : PS Scavenge, Count 5, Total duration : 365 ms, Avg duration : 73 ms
+Old Generation. Name : PS MarkSweep, Count 27, Total duration : 7491 ms, Avg duration : 277 ms
+_____________________________________________________________________________________________________
+
+-Xmx256m -Xms256m -XX:+UseConcMarkSweepGC
+-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./hw05_GC/logs/dump
+-Xloggc:./hw05_GC/logs/ConcMarkSweepGC.log
+
+Printing GC stats once a minute:
+Young Generation. Name : ParNew, Count 8, Total duration : 349 ms, Avg duration : 43 ms
+Old Generation. Name : ConcurrentMarkSweep, Count 1, Total duration : 38 ms, Avg duration : 38 ms
+Printing GC stats once a minute:
+Young Generation. Name : ParNew, Count 8, Total duration : 330 ms, Avg duration : 41 ms
+Old Generation. Name : ConcurrentMarkSweep, Count 18, Total duration : 12443 ms, Avg duration : 691 ms
+___________________________________________________________________________________________________
+
+Если взять в качестве критерия Avg duration и сравнить время со всеми тремя GC то лучший результат будет SerialGC
+ и по загрузки CPU and HEAP тоже лучший показатель.
