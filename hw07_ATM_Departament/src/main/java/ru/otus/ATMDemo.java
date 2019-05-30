@@ -11,11 +11,13 @@ public class ATMDemo {
         ATM atm1 = new ATM();
         DepartamentATM departamentATM = new DepartamentATM();
 
-        String banknote = "STO";
-        String banknote1 = "DVESTI";
+        String banknote = "BILLS_STO";
+        String banknote1 = "BILLS_DVESTI";
 
         atm.start("AcceptMoney", banknote, new AcceptMoney());
-
+        departamentATM.addAtm(atm);
+        departamentATM.restoreAllATM();
+        System.out.println("_____________");
         atm.start("AcceptMoney", banknote1, new AcceptMoney());
 
         atm1.start("AcceptMoney", banknote1, new AcceptMoney());
@@ -24,7 +26,7 @@ public class ATMDemo {
         atm.start("IssueBalance", banknote, new IssueBalance());
 
 
-        departamentATM.addAtm(atm);
+       // departamentATM.addAtm(atm);
         departamentATM.addAtm(atm1);
 
         departamentATM.getBalance();

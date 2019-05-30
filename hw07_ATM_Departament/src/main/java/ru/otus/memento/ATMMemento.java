@@ -9,7 +9,7 @@ public class ATMMemento {
     public ATMMemento(ATM atm) {
         this.atm = atm;
     }
-
+//сохраняем состояние атм (мементо)
     public ATM getSavedState() {
         return atm;
     }
