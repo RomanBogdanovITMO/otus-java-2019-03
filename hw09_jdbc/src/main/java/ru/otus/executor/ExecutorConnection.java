@@ -1,16 +1,13 @@
 package ru.otus.executor;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class ExecutorConnection {
 
-    private static final String URL = "jdbc:h2:/c:/otus-java-2019-03- 01/hw09_jdbc/h2/test";
+    private static final String URL = "jdbc:h2:/c:/otus-java-2019-03- 01/hw09_jdbc/h2/getAnnotation";
 
-    private static final String CREATE_TABLE_USER = "create table if not exists user " +
-            "(id bigint(20) NOT NULL auto_increment, name varchar(255), age int(3))";
+    private static final String CREATE_TABLE_USER = "create table if not exists user" +
+            "(id bigint(20) NOT NULL auto_increment, name varchar(255), age int)";
 
 
     public Connection getConnection() throws SQLException {
@@ -25,4 +22,5 @@ public class ExecutorConnection {
         }
         System.out.println("sucsessful");
     }
+
 }

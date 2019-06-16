@@ -2,16 +2,17 @@ package ru.otus.dao;
 
 public class User {
 
-    private final String Name;
+   private final String Name;
 
     private final int Age;
-    @id
+    @MyId
     private final long Id;
 
-    public User(String name, int age, long id) {
-        Name = name;
+    public User(long id,String name,  int age ) {
+       Name = name;
         Age = age;
         this.Id = id;
+
     }
 
     public String getName() {
@@ -29,7 +30,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "Name='" + Name + '\'' +
+              //  "Name='" + Name + '\'' +
                 ", Age=" + Age +
                 ", Id=" + Id +
                 '}';
