@@ -13,12 +13,12 @@ public class Main {
         executorConection.createTable(connection);
 
         User user = new User(0,"roman",3);
-        DBExcecutorImpl<User> dbExcecutor = new DBExcecutorImpl<>(connection);
+        /*DBExcecutorImpl<User> dbExcecutor = new DBExcecutorImpl<>(connection);
         dbExcecutor.getAnnotation(user);
         long userId = dbExcecutor.created("insert into user(name,age) values (?,?)", user);
         System.out.println(userId);
 
-        Optional<User> user1 = dbExcecutor.load("select id, name from user where id  = ?", userId, resultSet -> {
+        Optional<User> user1 = dbExcecutor.load("select id, name, age from user where id  = ?", userId, resultSet -> {
             try {
                 if (resultSet.next()) {
                     return new User(resultSet.getLong("id"), resultSet.getString("name"),
@@ -30,7 +30,10 @@ public class Main {
             return null;
         });
         System.out.println(user1);
-        connection.close();
+        connection.close();*/
+
+       JdbcTemplate jdbcTemplate = new JdbcTemplate(connection);
+       jdbcTemplate.create(user);
 
     }
 }
