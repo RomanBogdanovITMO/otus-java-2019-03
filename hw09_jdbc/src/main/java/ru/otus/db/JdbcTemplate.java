@@ -1,26 +1,37 @@
-package ru.otus;
+package ru.otus.db;
 
 import ru.otus.dao.MyId;
 import ru.otus.executor.DBExcecutorImpl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class JdbcTemplate {
+
+public class JdbcTemplate<T>implements DBService<T> {
     private final Connection connection;
+    private static final String CREATE_TABLE_USER = "create table if not exists user" +
+            "(id bigint(20) NOT NULL auto_increment, name varchar(255), age int)";
 
 
     public JdbcTemplate(Connection connection) {
         this.connection = connection;
     }
+    @Override
+    public void createTables(Connection connection) throws SQLException {
+        try (PreparedStatement pst = connection.prepareStatement(CREATE_TABLE_USER)) {
+            pst.executeUpdate();
+        }
+        System.out.println("createTable: sucsessful");
+    }
 
+    @Override
     public void create(Object object) throws IllegalAccessException, SQLException {
         String sqlParam1 = null;
         String sqlParam2 = null;
@@ -70,54 +81,55 @@ public class JdbcTemplate {
                 long parametr2 = (long) fl.get(object);
                 System.out.println("after " + fl.get(object));
             }
-
-       /* Method method = clazz.getMethod("getAge");
-        if (method.invoke(object)instanceof String){
-
-            System.out.println("yess");
-        }*/
-
-
         }
         System.out.println(id);
         System.out.println(sqlInsert);
     }
+    @Override
+    public T load(long id, Class<T> clazz) throws SQLException, InvocationTargetException,
+            NoSuchMethodException, InstantiationException, IllegalAccessException {
 
-    public void load(Object object,long id) throws NoSuchMethodException {
-        String sqlParamId = null;
-        String sqlParam2 = null;
-        String sqlParam3 = null;
-        String sqlSelect = null;
-
-        DBExcecutorImpl<Object> dbExcecutor = new DBExcecutorImpl<>(connection);
-
-        Class<?> clazz = object.getClass();
-        Method method = clazz.getMethod("getAge");
-        Field[] fields = clazz.getDeclaredFields();
-        for (Field field: fields){
-            if ((sqlParamId == null) & (field.getName().toLowerCase().equals("id"))) {
-                sqlParamId = field.getName();
-            } else if (sqlParam2 == null) {
-                sqlParam2 = field.getName();
-            }else if (sqlParam3 == null){
-                sqlParam3 = field.getName();
+        String selectSqlQuery = getSelectSqlQuery(clazz);
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(selectSqlQuery)) {
+            preparedStatement.setLong(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return createInstance(resultSet, clazz);
             }
         }
-        sqlSelect = "select " + sqlParamId.toLowerCase() + ", " + sqlParam2.toLowerCase() + ", " +
-                sqlParam3.toLowerCase()+ " from " + clazz.getSimpleName().toLowerCase() +
-                " where " + sqlParamId.toLowerCase() + " = ?";
-        //как загрузить обьект из бд. если мы не знаем какой обьект будет на входе
-       /* Optional<Object> obj = dbExcecutor.load(sqlSelect, id, (ResultSet resultSet) -> {
-            try {
-                if (resultSet.next()) {
-                    return new Object(resultSet);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return null;
-        });*/
-        System.out.println(sqlSelect);
 
     }
+    private <T> String getSelectSqlQuery(Class<T> clazz) {
+        Field[] fields = clazz.getDeclaredFields();
+        List<String> listFieldName = new ArrayList<>();
+        String idColumnName = "";
+
+        for (Field field : fields) {
+            if (field.getAnnotation(MyId.class) != null) {
+                idColumnName = field.getName();
+            }
+            field.setAccessible(true);
+            listFieldName.add(field.getName());
+        }
+
+        String columnNames = String.join(",", listFieldName);
+        String tableName = clazz.getSimpleName();
+
+        return String.format("SELECT %s FROM %s WHERE %s=?", columnNames, tableName, idColumnName);
+    }
+
+    private  <T> T createInstance(ResultSet resultSet, Class<T> clazz) throws SQLException, NoSuchMethodException,
+            IllegalAccessException, InvocationTargetException, InstantiationException {
+
+        if (resultSet.next()) {
+            T instance = clazz.getDeclaredConstructor().newInstance();
+            Field[] declaredFields = clazz.getDeclaredFields();
+            for (Field field : declaredFields) {
+                field.setAccessible(true);
+                field.set(instance, resultSet.getObject(field.getName()));
+            }
+            return instance;
+        }
+        return null;
+    }
+
 }
