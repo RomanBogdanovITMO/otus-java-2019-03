@@ -26,6 +26,7 @@ public class JdbcTemplate<T>implements DBService<T> {
     public JdbcTemplate(Connection connection) {
         this.connection = connection;
     }
+
     @Override
     public void createTables(Connection connection) throws SQLException {
         try (PreparedStatement pst = connection.prepareStatement(CREATE_TABLE_USER)) {
@@ -53,19 +54,19 @@ public class JdbcTemplate<T>implements DBService<T> {
             for (Annotation an : annotations) {
                 if (an instanceof MyId) {
                     for (Field fl1 : fields) {
-                        if (!(fl1.getName().equals("Id"))) {
+                        // if (!(fl1.getName().equals("Id"))) {
 
-                            listFieldName.add(fl1.getName());
-                        }
+                        listFieldName.add(fl1.getName());
+                        //}
                     }
-                    for (int i = 0; i < listFieldName.size(); i++){
+                    for (int i = 0; i < listFieldName.size(); i++) {
                         String simvol = "?";
                         listFieldNameSimvol.add(simvol);
                     }
                     String tableName = clazz.getSimpleName();
                     String columnNames = String.join(",", listFieldName);
                     String valuesCount = String.join(",", listFieldNameSimvol);
-                    sqlInsert = String.format("insert into %s (%s) values (%s)",tableName,columnNames,valuesCount);
+                    sqlInsert = String.format("insert into %s (%s) values (%s)", tableName, columnNames, valuesCount);
                     System.out.println(sqlInsert);
                 }
             }
@@ -84,18 +85,21 @@ public class JdbcTemplate<T>implements DBService<T> {
         System.out.println(id);
         System.out.println(sqlInsert);
     }
+
     @Override
-    public T load(long id, Class<T> clazz) throws SQLException, InvocationTargetException,
-            NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public T load(long id, Class<T> clazz) {
 
         String selectSqlQuery = SqlHelper.getSelectSqlQuery(clazz);
         try (PreparedStatement preparedStatement = this.connection.prepareStatement(selectSqlQuery)) {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return ReflectionHelper.createInstance(resultSet,clazz);
+                return ReflectionHelper.createInstance(resultSet, clazz);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
+        return null;
     }
-
 }
