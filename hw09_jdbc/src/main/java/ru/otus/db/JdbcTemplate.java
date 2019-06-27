@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class JdbcTemplate<T> implements DBService<T> {
+public class JdbcTemplate<T> {
     private final Connection connection;
     private static final String CREATE_TABLE_USER = "create table if not exists user" +
             "(id bigint(20) NOT NULL auto_increment, name varchar(255), age int)";
@@ -25,7 +25,7 @@ public class JdbcTemplate<T> implements DBService<T> {
         this.connection = connection;
     }
 
-    @Override
+
     public void createTables(Connection connection) throws SQLException {
         try (PreparedStatement pst = connection.prepareStatement(CREATE_TABLE_USER)) {
             pst.executeUpdate();
@@ -33,48 +33,22 @@ public class JdbcTemplate<T> implements DBService<T> {
         System.out.println("createTable: sucsessful");
     }
 
-    @Override
+
     public void create(Object object) throws IllegalAccessException, SQLException {
-        List<String> listFieldName = new ArrayList<>();
-        List<String> listFieldNameSimvol = new ArrayList<>();
-        List<Object> paramObjects = new ArrayList<>();
-        String sqlInsert = null;
 
         DBExcecutorImpl<Object> dbExcecutor = new DBExcecutorImpl<>(connection);
-
         Class<?> clazz = object.getClass();
-        Field[] fields = clazz.getDeclaredFields();
 
-        for (Field fl : fields) {
-            fl.setAccessible(true);
-            Annotation[] annotations = fl.getDeclaredAnnotations();
-            for (Annotation an : annotations) {
-                if (an instanceof MyId) {
-                    for (Field fl1 : fields) {
-                        if (!(fl1.getName().equals("Id"))) {
-                            fl1.setAccessible(true);
-                            paramObjects.add(fl1.get(object));
-                            listFieldName.add(fl1.getName());
-                        }
-                    }
-                    for (int i = 0; i < listFieldName.size(); i++) {
-                        String simvol = "?";
-                        listFieldNameSimvol.add(simvol);
-                    }
-                    String tableName = clazz.getSimpleName();
-                    String columnNames = String.join(",", listFieldName);
-                    String valuesCount = String.join(",", listFieldNameSimvol);
-                    sqlInsert = String.format("insert into %s (%s) values (%s)", tableName, columnNames, valuesCount);
-                }
-            }
+        String sqlInsert = SqlHelper.getInsertSqlQuery(clazz);
+        List<Object> paramObjects = getParamObgect(object);
+
+            long id = dbExcecutor.created(sqlInsert, paramObjects);
+            System.out.println("id users: " + id);
+            System.out.println("запрос: " + sqlInsert);
         }
 
-        long id = dbExcecutor.created(sqlInsert, paramObjects);
-        System.out.println("id users: " + id);
-        System.out.println("запрос: " + sqlInsert);
-    }
 
-    @Override
+
     public T load(long id, Class<T> clazz) {
 
         String selectSqlQuery = SqlHelper.getSelectSqlQuery(clazz);
@@ -89,5 +63,20 @@ public class JdbcTemplate<T> implements DBService<T> {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private List<Object> getParamObgect(Object object) throws IllegalAccessException {
+
+        List<Object> paramObjects = new ArrayList<>();
+
+        Class<?> clazz = object.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            if (field.getAnnotation(MyId.class) == null) {
+                paramObjects.add(field.get(object));
+            }
+        }
+        return paramObjects;
     }
 }

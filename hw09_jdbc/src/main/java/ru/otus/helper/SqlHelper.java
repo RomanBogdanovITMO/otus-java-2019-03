@@ -25,4 +25,29 @@ public class SqlHelper {
 
         return String.format("SELECT %s FROM %s WHERE %s=?", columnNames, tableName, idColumnName);
     }
+
+    public static <T> String getInsertSqlQuery(Class<T> clazz) {
+        List<String> listFieldName = new ArrayList<>();
+        List<String> listFieldNameSimvol = new ArrayList<>();
+        String sqlInsert = null;
+
+        Field[] fields = clazz.getDeclaredFields();
+
+        for (Field field : fields) {
+            field.setAccessible(true);
+            if (field.getAnnotation(MyId.class) == null) {
+                listFieldName.add(field.getName());
+            }
+        }
+        for (int i = 0; i < listFieldName.size(); i++) {
+            String numberOfValues = "?";
+            listFieldNameSimvol.add(numberOfValues);
+        }
+        String tableName = clazz.getSimpleName();
+        String columnNames = String.join(",", listFieldName);
+        String valuesCount = String.join(",", listFieldNameSimvol);
+        sqlInsert = String.format("insert into %s (%s) values (%s)", tableName, columnNames, valuesCount);
+
+        return sqlInsert;
+    }
 }
