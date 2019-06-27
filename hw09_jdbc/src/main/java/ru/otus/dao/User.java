@@ -2,17 +2,19 @@ package ru.otus.dao;
 
 public class User {
 
-   private  String Name;
-
-    private int Age;
     @MyId
     private long Id;
-    public User(){
+
+    private String Name;
+
+    private int Age;
+
+    public User() {
 
     }
 
-    public User(long id,String name,  int age ) {
-       Name = name;
+    public User(long id, String name, int age) {
+        Name = name;
         Age = age;
         this.Id = id;
 

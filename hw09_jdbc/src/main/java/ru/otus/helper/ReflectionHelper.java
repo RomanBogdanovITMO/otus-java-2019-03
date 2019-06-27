@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ReflectionHelper {
-    public static   <T> T createInstance(ResultSet resultSet, Class<T> clazz) throws SQLException, NoSuchMethodException,
+    public static <T> T createInstance(ResultSet resultSet, Class<T> clazz) throws SQLException, NoSuchMethodException,
             IllegalAccessException, InvocationTargetException, InstantiationException {
 
         if (resultSet.next()) {

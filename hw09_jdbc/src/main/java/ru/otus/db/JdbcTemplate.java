@@ -7,7 +7,6 @@ import ru.otus.helper.SqlHelper;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,8 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
-public class JdbcTemplate<T>implements DBService<T> {
+public class JdbcTemplate<T> implements DBService<T> {
     private final Connection connection;
     private static final String CREATE_TABLE_USER = "create table if not exists user" +
             "(id bigint(20) NOT NULL auto_increment, name varchar(255), age int)";
@@ -49,15 +47,15 @@ public class JdbcTemplate<T>implements DBService<T> {
 
         for (Field fl : fields) {
             fl.setAccessible(true);
-            paramObjects.add(fl.get(object));
             Annotation[] annotations = fl.getDeclaredAnnotations();
             for (Annotation an : annotations) {
                 if (an instanceof MyId) {
                     for (Field fl1 : fields) {
-                        // if (!(fl1.getName().equals("Id"))) {
-
-                        listFieldName.add(fl1.getName());
-                        //}
+                        if (!(fl1.getName().equals("Id"))) {
+                            fl1.setAccessible(true);
+                            paramObjects.add(fl1.get(object));
+                            listFieldName.add(fl1.getName());
+                        }
                     }
                     for (int i = 0; i < listFieldName.size(); i++) {
                         String simvol = "?";
@@ -67,23 +65,13 @@ public class JdbcTemplate<T>implements DBService<T> {
                     String columnNames = String.join(",", listFieldName);
                     String valuesCount = String.join(",", listFieldNameSimvol);
                     sqlInsert = String.format("insert into %s (%s) values (%s)", tableName, columnNames, valuesCount);
-                    System.out.println(sqlInsert);
                 }
             }
         }
-        System.out.println("before " + paramObjects);
+
         long id = dbExcecutor.created(sqlInsert, paramObjects);
-        for (Field fl : fields) {
-            fl.setAccessible(true);
-            if (fl.get(object) instanceof Long) {
-                System.out.println("bedore " + fl.get(object));
-                fl.set(object, id);
-                long parametr2 = (long) fl.get(object);
-                System.out.println("after " + fl.get(object));
-            }
-        }
-        System.out.println(id);
-        System.out.println(sqlInsert);
+        System.out.println("id users: " + id);
+        System.out.println("запрос: " + sqlInsert);
     }
 
     @Override

@@ -18,8 +18,8 @@ public class Main {
         User user = new User(0,"roman",3);
 
         dbService.create(user);
-        Object user1 = dbService.load(1,User.class);
-        System.out.println(user1);//почему то возвращает null.
+        Object user1 = dbService.load(7,User.class);
+        System.out.println(user1);
 
 
 
