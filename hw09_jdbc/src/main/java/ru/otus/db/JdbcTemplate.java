@@ -40,7 +40,7 @@ public class JdbcTemplate<T> {
         Class<?> clazz = object.getClass();
 
         String sqlInsert = SqlHelper.getInsertSqlQuery(clazz);
-        List<Object> paramObjects = getParamObgect(object);
+        List<Object> paramObjects = ReflectionHelper.getParamObgect(object);
 
             long id = dbExcecutor.created(sqlInsert, paramObjects);
             System.out.println("id users: " + id);
@@ -65,7 +65,7 @@ public class JdbcTemplate<T> {
         return null;
     }
 
-    private List<Object> getParamObgect(Object object) throws IllegalAccessException {
+    /*private List<Object> getParamObgect(Object object) throws IllegalAccessException {
 
         List<Object> paramObjects = new ArrayList<>();
 
@@ -78,5 +78,5 @@ public class JdbcTemplate<T> {
             }
         }
         return paramObjects;
-    }
+    }*/
 }

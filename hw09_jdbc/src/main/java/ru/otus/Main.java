@@ -12,7 +12,7 @@ public class Main {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(H2DBConnection.getConnection());
         jdbcTemplate.createTables(H2DBConnection.getConnection());
         jdbcTemplate.create(user);
-        Object user1 = jdbcTemplate.load(5,User.class);
+        Object user1 = jdbcTemplate.load(1,User.class);
 
         System.out.println(user1);
 

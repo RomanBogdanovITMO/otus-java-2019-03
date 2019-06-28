@@ -29,13 +29,13 @@ public class SqlHelper {
     public static <T> String getInsertSqlQuery(Class<T> clazz) {
         List<String> listFieldName = new ArrayList<>();
         List<String> listFieldNameSimvol = new ArrayList<>();
-        String sqlInsert = null;
 
         Field[] fields = clazz.getDeclaredFields();
 
         for (Field field : fields) {
-            field.setAccessible(true);
-            if (field.getAnnotation(MyId.class) == null) {
+           // field.setAccessible(true);
+            if (field.getAnnotation(MyId.class) != null) {
+                field.setAccessible(true);
                 listFieldName.add(field.getName());
             }
         }
@@ -46,8 +46,7 @@ public class SqlHelper {
         String tableName = clazz.getSimpleName();
         String columnNames = String.join(",", listFieldName);
         String valuesCount = String.join(",", listFieldNameSimvol);
-        sqlInsert = String.format("insert into %s (%s) values (%s)", tableName, columnNames, valuesCount);
 
-        return sqlInsert;
+        return String.format("insert into %s (%s) values (%s)", tableName, columnNames, valuesCount);
     }
 }
