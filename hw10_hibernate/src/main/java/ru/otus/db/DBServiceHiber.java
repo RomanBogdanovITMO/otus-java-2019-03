@@ -3,6 +3,8 @@ package ru.otus.db;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -14,39 +16,41 @@ import ru.otus.dataset.UserDataSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class JdbcTemplateHibernate {
+public class DBServiceHiber {
     private final SessionFactory sessionFactory;
 
-    public JdbcTemplateHibernate() {
+    public DBServiceHiber() {
         Configuration configuration = new Configuration()
                 .configure("hibernate.cfg.xml");
-        configuration.addAnnotatedClass(UserDataSet.class)
+        Metadata metadata = new MetadataSources(cr(configuration))
+                .addAnnotatedClass(UserDataSet.class)
                 .addAnnotatedClass(PhoneDataSet.class)
-                .addAnnotatedClass(AddressDataSet.class);
-        sessionFactory = createSessionFactory(configuration);
+                .addAnnotatedClass(AddressDataSet.class)
+                .getMetadataBuilder()
+                .build();
+        sessionFactory = metadata.getSessionFactoryBuilder().build();
 
     }
-    public JdbcTemplateHibernate(Configuration configuration){
-        this.sessionFactory = createSessionFactory(configuration);
-    }
 
-    public static SessionFactory createSessionFactory(Configuration configuration){
+    private static StandardServiceRegistry cr(Configuration configuration){
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties()).build();
-        return configuration.buildSessionFactory(serviceRegistry);
+        return serviceRegistry;
     }
+
     public void create(UserDataSet dataSet) {
         try (Session session = sessionFactory.openSession()) {
-            UserDAO dao = new UserDAO(session);
-            dao.create(dataSet);
+           session.beginTransaction();
+           session.save(dataSet);
+           session.getTransaction().commit();
         }
     }
 
     public UserDataSet load(long id) {
-        return runInSession(session -> {
-            UserDAO dao = new UserDAO(session);
-            return dao.load(id);
-        });
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            return session.get(UserDataSet.class,id);
+        }
     }
     public String getLocalStatus() {
         return runInSession(session -> {

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class UserDataSet {
+public class UserDataSet  {
     @Id
     @GeneratedValue
     private long Id;
@@ -15,7 +15,7 @@ public class UserDataSet {
     private String Name;
 
     private int Age;
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PhoneDataSet> phoneDataSetList = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -26,7 +26,6 @@ public class UserDataSet {
     }
 
     public UserDataSet(String name, int age,AddressDataSet addressDataSet,PhoneDataSet phone) {
-        this.setId(-1);
         this.Name = name;
         this.Age = age;
         this.address = addressDataSet;

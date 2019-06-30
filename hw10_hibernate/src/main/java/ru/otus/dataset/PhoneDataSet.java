@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "phone")
-public class PhoneDataSet {
+public class PhoneDataSet  {
     @Id
     @GeneratedValue
     private Long id;
@@ -14,7 +14,7 @@ public class PhoneDataSet {
     @Column(name = "phone_number", nullable = false)
     private String number;
 
-    @ManyToOne//(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private UserDataSet user;
 
@@ -46,14 +46,14 @@ public class PhoneDataSet {
         return number;
     }
 
-    /*public void setNumber(String number) {
+   /* public void setNumber(String number) {
         this.number = number;
     }*/
 
     @Override
     public String toString() {
         return "PhoneDataSet{" +
-                "id=" + id +
+
                 ", userId=" + user.getId() +
                 ", number='" + number + '\'' +
                 '}';

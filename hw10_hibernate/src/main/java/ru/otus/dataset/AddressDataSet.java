@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "address")
-public class AddressDataSet {
+public class AddressDataSet  {
 
     @Id
     @GeneratedValue
@@ -39,7 +39,6 @@ public class AddressDataSet {
     @Override
     public String toString() {
         return "AddressDataSet{" +
-                "id=" + id +
                 ", street='" + street + '\'' +
                 '}';
     }
