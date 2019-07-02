@@ -1,6 +1,9 @@
 package ru.otus.dataset;
 
 
+import org.hibernate.annotations.Parent;
+import org.hibernate.annotations.Target;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +18,14 @@ public class UserDataSet  {
     private String Name;
 
     private int Age;
+
+    @Embedded
+    @Target(PhoneDataSet.class)
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PhoneDataSet> phoneDataSetList = new ArrayList<>();
 
+    @Embedded
+    @Target(AddressDataSet.class)
     @OneToOne(cascade = CascadeType.ALL)
     private AddressDataSet address;
 

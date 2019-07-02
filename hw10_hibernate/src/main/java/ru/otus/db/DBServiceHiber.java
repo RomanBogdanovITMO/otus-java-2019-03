@@ -8,6 +8,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 import ru.otus.dao.UserDAO;
 import ru.otus.dataset.AddressDataSet;
 import ru.otus.dataset.PhoneDataSet;
@@ -22,7 +23,7 @@ public class DBServiceHiber {
     public DBServiceHiber() {
         Configuration configuration = new Configuration()
                 .configure("hibernate.cfg.xml");
-        Metadata metadata = new MetadataSources(cr(configuration))
+        Metadata metadata = new MetadataSources(createServiceRegistry(configuration))
                 .addAnnotatedClass(UserDataSet.class)
                 .addAnnotatedClass(PhoneDataSet.class)
                 .addAnnotatedClass(AddressDataSet.class)
@@ -32,7 +33,7 @@ public class DBServiceHiber {
 
     }
 
-    private static StandardServiceRegistry cr(Configuration configuration){
+    private static StandardServiceRegistry createServiceRegistry(Configuration configuration){
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties()).build();
         return serviceRegistry;
@@ -47,10 +48,14 @@ public class DBServiceHiber {
     }
 
     public UserDataSet load(long id) {
-        try (Session session = sessionFactory.openSession()) {
+        return runInSession(session -> {
+            UserDAO dao = new UserDAO(session);
+            return dao.load(id);
+        });
+        /*try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             return session.get(UserDataSet.class,id);
-        }
+        }*/
     }
     public String getLocalStatus() {
         return runInSession(session -> {

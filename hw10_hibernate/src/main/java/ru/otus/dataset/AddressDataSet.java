@@ -2,7 +2,7 @@ package ru.otus.dataset;
 
 import javax.persistence.*;
 
-
+@Embeddable
 @Entity
 @Table(name = "address")
 public class AddressDataSet  {

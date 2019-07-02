@@ -1,8 +1,11 @@
 package ru.otus.dataset;
 
+import org.hibernate.annotations.Parent;
+import org.hibernate.annotations.Target;
+
 import javax.persistence.*;
 import java.util.Objects;
-
+@Embeddable
 @Entity
 @Table(name = "phone")
 public class PhoneDataSet  {
@@ -13,6 +16,7 @@ public class PhoneDataSet  {
 
     @Column(name = "phone_number", nullable = false)
     private String number;
+
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
