@@ -19,6 +19,9 @@ public class JdbcTemplate<T> {
     private final Connection connection;
     private static final String CREATE_TABLE_USER = "create table if not exists user" +
             "(id bigint(20) NOT NULL auto_increment, name varchar(255), age int)";
+    private static final String CREATE_TABLE_ACCOUNT = "create table if not exists account" +
+            "(id bigint(20) NOT NULL auto_increment, nameAccount varchar(255), valueAccount int)";
+
 
 
     public JdbcTemplate(Connection connection) {
@@ -28,6 +31,12 @@ public class JdbcTemplate<T> {
 
     public void createTables(Connection connection) throws SQLException {
         try (PreparedStatement pst = connection.prepareStatement(CREATE_TABLE_USER)) {
+            pst.executeUpdate();
+        }
+        System.out.println("createTable: sucsessful");
+    }
+    public void createTablesAccount(Connection connection) throws SQLException {
+        try (PreparedStatement pst = connection.prepareStatement(CREATE_TABLE_ACCOUNT)) {
             pst.executeUpdate();
         }
         System.out.println("createTable: sucsessful");

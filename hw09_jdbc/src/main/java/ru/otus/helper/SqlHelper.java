@@ -34,7 +34,7 @@ public class SqlHelper {
 
         for (Field field : fields) {
            // field.setAccessible(true);
-            if (field.getAnnotation(MyId.class) != null) {
+            if (field.getAnnotation(MyId.class) == null) {
                 field.setAccessible(true);
                 listFieldName.add(field.getName());
             }
