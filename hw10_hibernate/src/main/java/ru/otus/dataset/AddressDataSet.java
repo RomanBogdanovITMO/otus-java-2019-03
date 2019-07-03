@@ -14,7 +14,8 @@ public class AddressDataSet  {
     @Column(name = "address_street", nullable = false)
     private String street;
 
-
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private UserDataSet userDataSet;
 
     public AddressDataSet() {
     }
@@ -35,12 +36,20 @@ public class AddressDataSet  {
         return street;
     }
 
+    public UserDataSet getUserDataSet() {
+        return userDataSet;
+    }
+
+    public void setUserDataSet(UserDataSet userDataSet) {
+        this.userDataSet = userDataSet;
+    }
 
     @Override
     public String toString() {
         return "AddressDataSet{" +
+                "id=" + id +
                 ", street='" + street + '\'' +
+                ", userDataSet=" + userDataSet +
                 '}';
     }
-
 }

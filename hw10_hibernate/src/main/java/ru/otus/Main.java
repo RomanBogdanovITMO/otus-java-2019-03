@@ -16,8 +16,8 @@ public class Main {
                 new PhoneDataSet("0000000000"));
 
         serviceHiber.create(usr);
-        PhoneDataSet phoneDataSet = new PhoneDataSet("03");
-        usr.addPhone(phoneDataSet);
+       // PhoneDataSet phoneDataSet = new PhoneDataSet("03");
+       // usr.addPhone(phoneDataSet);
         serviceHiber.create(usr);
 
         UserDataSet usre = serviceHiber.load(usr.getId());
