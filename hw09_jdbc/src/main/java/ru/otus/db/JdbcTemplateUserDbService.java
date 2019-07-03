@@ -15,7 +15,7 @@ public class JdbcTemplateUserDbService implements UserDBService {
     public User create(User user) throws SQLException, IllegalAccessException {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(H2DBConnection.getConnection());
         jdbcTemplate.create(user);
-        return null;
+        return user;
     }
 
     @Override

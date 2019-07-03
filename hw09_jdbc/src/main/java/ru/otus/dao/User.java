@@ -5,27 +5,27 @@ public class User {
     @MyId
     private long Id;
 
-    private String Name;
+    private String firstname;
 
-    private int Age;
+    private int age;
 
     public User() {
 
     }
 
-    public User(long id, String name, int age) {
-        Name = name;
-        Age = age;
+    public User(long id, String name, int age1) {
+        firstname = name;
+        age = age;
         this.Id = id;
 
     }
 
     public String getName() {
-        return Name;
+        return firstname;
     }
 
     public int getAge() {
-        return Age;
+        return age;
     }
 
     public long getId() {
@@ -35,8 +35,8 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "Name='" + Name + '\'' +
-                ", Age=" + Age +
+                "Name='" + firstname + '\'' +
+                ", Age=" + age +
                 ", Id=" + Id +
                 '}';
     }
