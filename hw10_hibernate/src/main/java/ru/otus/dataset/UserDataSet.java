@@ -27,6 +27,7 @@ public class UserDataSet  {
     @Embedded
     @Target(AddressDataSet.class)
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ADDR_ADDR_ID")
     private AddressDataSet address;
 
     public UserDataSet() {

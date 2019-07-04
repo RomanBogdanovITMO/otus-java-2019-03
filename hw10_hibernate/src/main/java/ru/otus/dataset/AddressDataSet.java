@@ -14,7 +14,7 @@ public class AddressDataSet  {
     @Column(name = "address_street", nullable = false)
     private String street;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL)
     private UserDataSet userDataSet;
 
     public AddressDataSet() {

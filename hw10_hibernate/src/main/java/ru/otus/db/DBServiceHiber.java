@@ -22,7 +22,7 @@ public class DBServiceHiber {
 
     public DBServiceHiber() {
         Configuration configuration = new Configuration()
-                .configure("hibernate.cfg.xml");
+                .configure("hibernat.xml");
         Metadata metadata = new MetadataSources(createServiceRegistry(configuration))
                 .addAnnotatedClass(UserDataSet.class)
                 .addAnnotatedClass(PhoneDataSet.class)
