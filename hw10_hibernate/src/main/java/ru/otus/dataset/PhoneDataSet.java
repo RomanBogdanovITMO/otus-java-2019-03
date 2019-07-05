@@ -57,8 +57,7 @@ public class PhoneDataSet  {
     @Override
     public String toString() {
         return "PhoneDataSet{" +
-
-                ", userId=" + user.getId() +
+                "id=" + id +
                 ", number='" + number + '\'' +
                 '}';
     }

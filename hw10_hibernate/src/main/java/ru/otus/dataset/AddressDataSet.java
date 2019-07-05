@@ -49,7 +49,6 @@ public class AddressDataSet  {
         return "AddressDataSet{" +
                 "id=" + id +
                 ", street='" + street + '\'' +
-                ", userDataSet=" + userDataSet +
                 '}';
     }
 }

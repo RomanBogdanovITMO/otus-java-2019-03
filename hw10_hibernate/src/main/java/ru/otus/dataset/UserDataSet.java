@@ -93,9 +93,7 @@ public class UserDataSet  {
         return "UserDataSet{" +
                 "Id=" + Id +
                 ", Name='" + Name + '\'' +
-                ", Age=" + Age +
-                ", phoneDataSetList=" + phoneDataSetList +
-                ", address=" + address +
+                ", Age=" + Age + "phone = " + phoneDataSetList + " address = " + address +
                 '}';
     }
 }
