@@ -52,10 +52,7 @@ public class DBServiceHiber {
             UserDAO dao = new UserDAO(session);
             return dao.load(id);
         });
-        /*try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            return session.get(UserDataSet.class,id);
-        }*/
+
     }
     public String getLocalStatus() {
         return runInSession(session -> {

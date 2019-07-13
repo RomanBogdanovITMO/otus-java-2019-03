@@ -21,6 +21,8 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K,V> {
     private int hit = 0;
     private int miss = 0;
 
+
+
     public CacheEngineImpl(int maxElements, long lifeTimeMs, long idleTimeMs, boolean isEternal) {
         this.maxElements = maxElements;
         this.lifeTimeMs = lifeTimeMs > 0 ? lifeTimeMs : 0;
@@ -52,16 +54,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K,V> {
 
     @Override
     public MyElement<K, V> get(K key) {
-
-        SoftReference<MyElement<K, V>> softref = elements.get(key);
-        MyElement<K, V> element = softref != null ? softref.get() : null;
-        if (element != null){
-            hit++;
-            element.setAccessed();
-        }else {
-            miss++;
-        }
-        return element;
+        return  null;
     }
 
     @Override
@@ -99,15 +92,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K,V> {
 
     }
 
-    @Override
-    public V getOrCalculate(K key, Function<K, V> externalGetter) {
-        V result = getV(key);
-        if (result == null) {
-            result = externalGetter.apply(key);
-            if (result != null) put(key, result);
-        }
-        return result;
-    }
+
 
     private TimerTask getTimerTask(final K key, Function<MyElement<K, V>, Long> timeFunction) {
         return new TimerTask() {
