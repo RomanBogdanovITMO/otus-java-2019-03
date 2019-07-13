@@ -1,59 +1,78 @@
 package ru.otus.dataset;
 
+import org.hibernate.annotations.Parent;
+import org.hibernate.annotations.Target;
+
 import javax.persistence.*;
 import java.util.Objects;
-
+@Embeddable
 @Entity
 @Table(name = "phone")
-public class PhoneDataSet extends DataSet {
+public class PhoneDataSet  {
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    @Column(name = "number")
+
+    @Column(name = "phone_number", nullable = false)
     private String number;
 
-   /* @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private UserDataSet user;
 
-    public UserDataSet getUser() {
-        return user;
-    }
-
-    public void setUser(UserDataSet user) {
-        this.user = user;
-    }*/
-
     public PhoneDataSet() {
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
     }
 
     public PhoneDataSet(String number) {
         this.number = number;
     }
 
+    public Long getId()
+    {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UserDataSet getUser() {
+        return user;
+    }
+
+    public void setUse(UserDataSet user) {
+        this.user = user;
+    }
+
     public String getNumber() {
         return number;
+    }
+
+   /* public void setNumber(String number) {
+        this.number = number;
+    }*/
+
+    @Override
+    public String toString() {
+        return "PhoneDataSet{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PhoneDataSet)) return false;
-        PhoneDataSet that = (PhoneDataSet) o;
-        return Objects.equals(getNumber(), that.getNumber());
+        if (o == null || getClass() != o.getClass()) return false;
+        PhoneDataSet phone = (PhoneDataSet) o;
+        return Objects.equals(id, phone.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getNumber());
-    }
 
-    @Override
-    public String toString() {
-        return "PhoneDataSet{" +
-                "number='" + number + '\'' +
-                '}';
+        return Objects.hash(id);
     }
 }

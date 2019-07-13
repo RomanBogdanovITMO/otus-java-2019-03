@@ -1,21 +1,21 @@
 package ru.otus.dataset;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import java.util.Objects;
+import javax.persistence.*;
 
+@Embeddable
 @Entity
 @Table(name = "address")
-public class AddressDataSet extends DataSet {
+public class AddressDataSet  {
 
-    @Column(name = "street",nullable = false)
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(name = "address_street", nullable = false)
     private String street;
 
     @OneToOne(mappedBy = "address")
     private UserDataSet userDataSet;
-
 
     public AddressDataSet() {
     }
@@ -24,13 +24,18 @@ public class AddressDataSet extends DataSet {
         this.street = street;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getStreet() {
         return street;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
     public UserDataSet getUserDataSet() {
         return userDataSet;
     }
@@ -40,22 +45,10 @@ public class AddressDataSet extends DataSet {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AddressDataSet)) return false;
-        AddressDataSet that = (AddressDataSet) o;
-        return Objects.equals(getStreet(), that.getStreet());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getStreet());
-    }
-
-    @Override
     public String toString() {
         return "AddressDataSet{" +
-                "street='" + street + '\'' +
+                "id=" + id +
+                ", street='" + street + '\'' +
                 '}';
     }
 }

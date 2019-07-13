@@ -1,62 +1,82 @@
 package ru.otus.dataset;
 
+import org.hibernate.annotations.Parent;
+import org.hibernate.annotations.Target;
+
 import javax.persistence.*;
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
-@Table(name = "user")
-public class UserDataSet extends DataSet {
+@Table(name = "users")
+public class UserDataSet  {
+    @Id
+    @GeneratedValue
+    private long Id;
 
-    @Column(name = "name")
-    private String name;
+    private String Name;
 
-    @Column(name = "age")
-    private Integer age;
+    private int Age;
 
+    @Embedded
+    @Target(PhoneDataSet.class)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<PhoneDataSet> phoneDataSetList = new ArrayList<>();
 
+    @Embedded
+    @Target(AddressDataSet.class)
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ADDR_ADDR_ID")
     private AddressDataSet address;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = false)
-    private List<PhoneDataSet> phones = new ArrayList<>();
-
     public UserDataSet() {
+
     }
 
-    public UserDataSet(UserDataSet userDataSet) {
-        this.name = userDataSet.getName();
-        this.age = userDataSet.getAge();
-        this.address = userDataSet.getAddress();
-        this.phones = userDataSet.getPhones();
+    public UserDataSet(String name, int age,AddressDataSet addressDataSet,PhoneDataSet phone) {
+        this.Name = name;
+        this.Age = age;
+        this.address = addressDataSet;
+        phoneDataSetList.add(phone);
+        phone.setUse(this);
     }
 
+    public long getId() {
+        return Id;
+    }
 
-    public UserDataSet(String name, Integer age, AddressDataSet address, List<PhoneDataSet> phones) {
-        this.name = name;
-        this.age = age;
-        this.address = address;
-        this.phones = phones;
+    public void setId(long id) {
+        Id = id;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.Name = name;
     }
 
-    public Integer getAge() {
-        return age;
+    public int getAge() {
+        return Age;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setAge(int age) {
+        this.Age = age;
+    }
+
+    public  PhoneDataSet getPhone(){
+        return phoneDataSetList.get(0);
+    }
+
+    public void addPhone(PhoneDataSet phone) {
+        phoneDataSetList.add(phone);
+        phone.setUse(this);
+    }
+
+    public void removePhone(PhoneDataSet phone) {
+        phoneDataSetList.remove(phone);
+        phone.setUse(null);
     }
 
     public AddressDataSet getAddress() {
@@ -67,45 +87,12 @@ public class UserDataSet extends DataSet {
         this.address = address;
     }
 
-    public List<PhoneDataSet> getPhones() {
-        return phones;
-    }
-
-    public void setPhones(List<PhoneDataSet> phones) {
-        this.phones.addAll(phones);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserDataSet)) return false;
-        UserDataSet that = (UserDataSet) o;
-        List<PhoneDataSet> phonesThat = that.getPhones();
-        if (phones.size() != phonesThat.size()) {
-            return false;
-        }
-        boolean checkPhones = true;
-        for (int i = 0; i < phones.size(); i++) {
-            if (!phones.get(i).equals(phonesThat.get(i))) checkPhones = false;
-        }
-        return Objects.equals(getName(), that.getName()) &&
-                Objects.equals(getAge(), that.getAge()) &&
-                Objects.equals(getAddress(), that.getAddress()) && checkPhones;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getName(), getAge(), getAddress(), getPhones());
-    }
-
     @Override
     public String toString() {
         return "UserDataSet{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                ", address=" + address +
-                ", phones=" + phones +
+                "Id=" + Id +
+                ", Name='" + Name + '\'' +
+                ", Age=" + Age + "phone = " + phoneDataSetList + " address = " + address +
                 '}';
     }
 }
-

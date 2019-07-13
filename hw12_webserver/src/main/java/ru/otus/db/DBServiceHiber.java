@@ -8,11 +8,13 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import ru.otus.dao.UserDataSetDAO;
+import org.hibernate.service.ServiceRegistry;
+import ru.otus.dao.UserDAO;
 import ru.otus.dataset.AddressDataSet;
 import ru.otus.dataset.PhoneDataSet;
 import ru.otus.dataset.UserDataSet;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class DBServiceHiber {
@@ -20,7 +22,7 @@ public class DBServiceHiber {
 
     public DBServiceHiber() {
         Configuration configuration = new Configuration()
-                .configure("hibernate.cfg.xml");
+                .configure("hibernat.xml");
         Metadata metadata = new MetadataSources(createServiceRegistry(configuration))
                 .addAnnotatedClass(UserDataSet.class)
                 .addAnnotatedClass(PhoneDataSet.class)
@@ -30,30 +32,38 @@ public class DBServiceHiber {
         sessionFactory = metadata.getSessionFactoryBuilder().build();
 
     }
+
     private static StandardServiceRegistry createServiceRegistry(Configuration configuration){
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties()).build();
         return serviceRegistry;
+    }
+
+    public void create(UserDataSet dataSet) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.save(dataSet);
+            session.getTransaction().commit();
+        }
+    }
+
+    public UserDataSet load(long id) {
+        return runInSession(session -> {
+            UserDAO dao = new UserDAO(session);
+            return dao.load(id);
+        });
     }
     public String getLocalStatus() {
         return runInSession(session -> {
             return session.getTransaction().getStatus().name();
         });
     }
-
-    public void create(UserDataSet dataSet) {
+    private void runInSession(Consumer<Session> consumer) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
-            UserDataSetDAO dao = new UserDataSetDAO(session);
-            dao.create(dataSet);
+            consumer.accept(session);
             transaction.commit();
         }
-    }
-    public UserDataSet load(long id) {
-        return runInSession(session -> {
-            UserDataSetDAO dao = new UserDataSetDAO(session);
-            return dao.load(id);
-        });
     }
     private <R> R runInSession(Function<Session, R> function) {
         try (Session session = sessionFactory.openSession()) {
@@ -62,9 +72,5 @@ public class DBServiceHiber {
             transaction.commit();
             return result;
         }
-    }
-
-    public void shutdown() {
-        sessionFactory.close();
     }
 }
