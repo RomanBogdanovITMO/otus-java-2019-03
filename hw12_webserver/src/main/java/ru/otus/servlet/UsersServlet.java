@@ -4,12 +4,16 @@ import org.hibernate.SessionFactory;
 import ru.otus.dataset.UserDataSet;
 
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UsersServlet extends HttpServlet {
@@ -30,14 +34,23 @@ public class UsersServlet extends HttpServlet {
     }
     private Map<String, Object> createPageVariablesMap(){
         Map<String,Object> pageVariables = new HashMap<>();
+        List<UserDataSet> userlists = allUsers();
         try (Session session = sessionFactory.openSession()){
-            for (int i = 1; i < 4; i ++) {// как получить список id user что бы заменить этот цикл? не понятно.
-                UserDataSet user1 = session.get(UserDataSet.class, i);
+            for (UserDataSet list: userlists){
+                UserDataSet user1 = session.get(UserDataSet.class, list.getId());
                 pageVariables.put("name", user1.getName());
                 pageVariables.put("age", user1.getAge());
                 pageVariables.put("address",user1.getAddress());
             }
         }
         return pageVariables;
+    }
+    private List<UserDataSet> allUsers(){
+        try (Session session = sessionFactory.openSession()){
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<UserDataSet> critarial = builder.createQuery(UserDataSet.class);
+            critarial.from(UserDataSet.class);
+            return session.createQuery(critarial).list();
+        }
     }
 }
