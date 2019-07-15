@@ -4,36 +4,34 @@ import ru.otus.cache.CacheEngine;
 import ru.otus.cache.MyElement;
 import ru.otus.dataset.UserDataSet;
 
-public class CacheDBSerivceImpl implements DBService {
+public class CacheDBServiceImpl implements DBService {
     private  CacheEngine<Long, UserDataSet> cache;
 
-    public CacheDBSerivceImpl() {
+    public CacheDBServiceImpl() {
         DBServiceHiber serviceHiber = new DBServiceHiber();
     }
 
-    public CacheDBSerivceImpl(CacheEngine<Long, UserDataSet> cache) {
+    public CacheDBServiceImpl(CacheEngine<Long, UserDataSet> cache) {
         this.cache = cache;
     }
 
     @Override
     public void create(UserDataSet dataSet) {
         DBServiceHiber serviceHiber = new DBServiceHiber();
-        MyElement<Long, UserDataSet> value = cache.get(dataSet.getId());//Exception in thread "main" java.lang.NullPointerException
-        if (value == null) {
             serviceHiber.create(dataSet);
             cache.put(dataSet.getId(),dataSet);
-        }
-        cache.put(value.getKey(),dataSet);
     }
 
     @Override
     public UserDataSet load(long id) {
         DBServiceHiber serviceHiber = new DBServiceHiber();
-        MyElement<Long, UserDataSet> value = cache.get(id);
-        if (value == null){
-            return serviceHiber.load(id);
+        UserDataSet dataSet = cache.get(id);
+        if (dataSet == null){
+            dataSet = serviceHiber.load(id);
+            if (dataSet != null)
+                cache.put(dataSet.getId(),dataSet);
         }
-        return serviceHiber.load(value.getKey());
+        return serviceHiber.load(id);
     }
 
 
