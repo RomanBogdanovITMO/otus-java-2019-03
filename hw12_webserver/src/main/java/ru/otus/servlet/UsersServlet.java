@@ -53,4 +53,5 @@ public class UsersServlet extends HttpServlet {
             return session.createQuery(critarial).list();
         }
     }
+
 }

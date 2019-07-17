@@ -30,4 +30,13 @@ public class TemplateProcessor {
             throw new IOException(e);
         }
     }
+    String getPageUser(String page,Object object)throws IOException{
+        try (Writer writer = new StringWriter()) {
+            Template template = configuration.getTemplate(page);
+            template.process(object, writer);
+            return writer.toString();
+        } catch (TemplateException e) {
+            throw new IOException(e);
+        }
+    }
 }
