@@ -4,19 +4,21 @@ package ru.otus.cache;
 import java.util.function.Function;
 
 public interface CacheEngine<K, V> {
-    void put(MyElement<K, V> element);
+    void put(K key, V value);
 
-    MyElement<K, V> get(K key);
+    V get(K key);
 
-    V getV(K key);
+    int getMaxElements();
+
+    long getLifeTimeMs();
+
+    long getIdleTimeMs();
+
+    boolean isEternal();
 
     int getHitCount();
 
     int getMissCount();
 
     void dispose();
-
-    void put(K key, V value);
-
-    V getOrCalculate(K key, Function<K,V> externalGetter);
 }
