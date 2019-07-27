@@ -50,9 +50,10 @@ public class PhoneDataSet  {
         return number;
     }
 
-   /* public void setNumber(String number) {
+ public void setNumber(String number) {
         this.number = number;
-    }*/
+    }
+
 
     @Override
     public String toString() {
