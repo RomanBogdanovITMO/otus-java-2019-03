@@ -12,13 +12,21 @@ public class ATM implements DepartametnElement {
     private ATMMemento atmMemento;
 
 //конструктор который создает атм с пустыми ячецками (для записи в мементо) паттерн мементо
+ hw09_jdbc
     public ATM(ATM atm) {
         cell = new HashMap<>();
         for (BILLS s : BILLS.values()) {
             cell.put(s, 0);
         }
+
+public ATM(ATM atm) {
+    cell = new HashMap<>();
+    for (BILLS s : BILLS.values()) {
+        cell.put(s, 0);
+ hw01-maven
     }
-//в месте с обьектом формируется ячейки с валютами и и обьект мементо .
+}
+    //в месте с обьектом формируется ячейки с валютами и и обьект мементо .
     public ATM() {
         cell = new HashMap<>();
         for (BILLS s : BILLS.values()) {
@@ -26,12 +34,16 @@ public class ATM implements DepartametnElement {
         }
         atmMemento = new ATMMemento(new ATM(this));
     }
+ hw09_jdbc
 //метод для вызова нужных операций "AcceptMoney, IssueBalance, GiveMoney" используется полиморфизм
+
+    //метод для вызова нужных операций "AcceptMoney, IssueBalance, GiveMoney" используется полиморфизм
+ hw01-maven
     public void start(String tittle, int countMoney, Operation operation) {
 
         operation.action(tittle, countMoney, cell);
     }
-// метод восстанавливает состояние ATM до начального
+    // метод восстанавливает состояние ATM до начального
     public void restoreInitialATMState() {
         ATM initStateAtm = atmMemento.getSavedState();
         System.out.println("first " + cell);

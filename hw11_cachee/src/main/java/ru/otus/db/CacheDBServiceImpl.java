@@ -18,8 +18,13 @@ public class CacheDBServiceImpl implements DBService {
     @Override
     public void create(UserDataSet dataSet) {
         DBServiceHiber serviceHiber = new DBServiceHiber();
+ hw12_webe-server
             serviceHiber.create(dataSet);
             cache.put(dataSet.getId(),dataSet);
+
+        serviceHiber.create(dataSet);
+        cache.put(dataSet.getId(),dataSet);
+hw01-maven
     }
 
     @Override

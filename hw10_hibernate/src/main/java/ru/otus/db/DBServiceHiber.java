@@ -8,6 +8,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 import ru.otus.dao.UserDAO;
 import ru.otus.dataset.AddressDataSet;
 import ru.otus.dataset.PhoneDataSet;
@@ -40,9 +41,9 @@ public class DBServiceHiber {
 
     public void create(UserDataSet dataSet) {
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.save(dataSet);
-            session.getTransaction().commit();
+           session.beginTransaction();
+           session.save(dataSet);
+           session.getTransaction().commit();
         }
     }
 
@@ -51,7 +52,10 @@ public class DBServiceHiber {
             UserDAO dao = new UserDAO(session);
             return dao.load(id);
         });
-
+        /*try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            return session.get(UserDataSet.class,id);
+        }*/
     }
     public String getLocalStatus() {
         return runInSession(session -> {
