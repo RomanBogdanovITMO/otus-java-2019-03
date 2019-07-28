@@ -33,6 +33,10 @@ public class DBServiceHiber {
 
     }
 
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
     private static StandardServiceRegistry createServiceRegistry(Configuration configuration){
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties()).build();

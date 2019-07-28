@@ -30,8 +30,8 @@ public class AddUserServlet extends HttpServlet {
         String phone = req.getParameter("phone");
         UserDataSet dataSet = new UserDataSet(name,age,new AddressDataSet(address),new PhoneDataSet(phone));
 
-        try (Session session = sessionFactory.openSession()){// java.lang.NullPointerException HTTP ERROR 500 - как исправить
-            session.getTransaction();
+        try (Session session = sessionFactory.openSession()){
+            session.beginTransaction();
             session.save(dataSet);
             session.getTransaction().commit();
         }

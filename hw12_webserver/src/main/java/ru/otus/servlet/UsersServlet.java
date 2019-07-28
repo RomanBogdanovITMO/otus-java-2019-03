@@ -24,7 +24,7 @@ public class UsersServlet extends HttpServlet {
     public UsersServlet(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-//получить список пользователей
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, Object> pageVariables = createPageVariablesMap();

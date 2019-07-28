@@ -11,7 +11,7 @@ public class AddressDataSet  {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "address_street", nullable = false)
+    @Column(name = "address_street")
     private String street;
 
     @OneToOne(mappedBy = "address")
