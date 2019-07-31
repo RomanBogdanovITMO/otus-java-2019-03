@@ -25,13 +25,21 @@ public class UsersServlet extends HttpServlet {
         this.sessionFactory = sessionFactory;
     }
 
-    @Override
+    /*@Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, Object> pageVariables = createPageVariablesMap();
         resp.setContentType(CONTENT_TYPE_TEXT);
         resp.getWriter().println(TemplateProcessor.instance().getPage(USER_PAGE_TEMPLATE,pageVariables));
 
+    }*/
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Map<String, Object> pageVariables = createPageVariablesMap();
+        resp.setContentType(CONTENT_TYPE_TEXT);
+        resp.getWriter().println(TemplateProcessor.instance().getPage(USER_PAGE_TEMPLATE,pageVariables));
     }
+
     private Map<String, Object> createPageVariablesMap(){
         Map<String,Object> pageVariables = new HashMap<>();
         List<UserDataSet> userlists = allUsers();
