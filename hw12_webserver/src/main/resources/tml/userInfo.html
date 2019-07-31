@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Webserver</title>
-    <!--<script>
-        function refresh() {
-            location.reload(true);
-        }
-    </script>-->
+
 </head>
 <body>
-<p>USER INFO:</p>
-<p>Name user: ${name}</p>
-<p>Age user: ${age}</p>
-<p>Address user: ${address}</p>
+<form method="post" action="/userADD">
+    <p>USER INFO:</p>
+    <p>Name user: ${name}</p>
+    <button type="submit">Submit</button>
+</form>
 </body>
 </html>

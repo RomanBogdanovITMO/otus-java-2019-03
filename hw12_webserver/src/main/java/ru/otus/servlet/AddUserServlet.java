@@ -40,4 +40,21 @@ public class AddUserServlet extends HttpServlet {
         resp.getWriter().println(TemplateProcessor.instance().getPageUser(ADD_USER_PAGE_TEMPLATE,dataSet));
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String name = req.getParameter("name");
+        Integer age = req.getIntHeader("age");
+        String address = req.getParameter("address");
+        String phone = req.getParameter("phone");
+        UserDataSet dataSet = new UserDataSet(name,age,new AddressDataSet(address),new PhoneDataSet(phone));
+
+        try (Session session = sessionFactory.openSession()){
+            session.beginTransaction();
+            session.save(dataSet);
+            session.getTransaction().commit();
+        }
+
+        resp.setContentType(CONTENT_TYPE_TEXT);
+        resp.getWriter().println(TemplateProcessor.instance().getPageUser(ADD_USER_PAGE_TEMPLATE,dataSet));
+    }
 }
