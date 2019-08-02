@@ -25,27 +25,37 @@ public class UsersServlet extends HttpServlet {
         this.sessionFactory = sessionFactory;
     }
 
-
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req,resp);
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, Object> pageVariables = createPageVariablesMap();
         resp.setContentType(CONTENT_TYPE_TEXT);
         resp.getWriter().println(TemplateProcessor.instance().getPage(USER_PAGE_TEMPLATE,pageVariables));
+        resp.setStatus(HttpServletResponse.SC_OK);
     }
 
     private Map<String, Object> createPageVariablesMap(){
         Map<String,Object> pageVariables = new HashMap<>();
         List<UserDataSet> userlists = allUsers();
-        /*try (Session session = sessionFactory.openSession()){
+
+        try (Session session = sessionFactory.openSession()){
             for (UserDataSet list: userlists){
                 UserDataSet user1 = session.get(UserDataSet.class, list.getId());
                 pageVariables.put("name", user1.getName());
                 pageVariables.put("age", user1.getAge());
                 pageVariables.put("address",user1.getAddress());
             }
-        }*/
-        pageVariables.put("name",userlists.toString());
+        }
+        pageVariables.put("name", userlists.toString());
+        //  pageVariables.put("age", userlists.size());
+        //  pageVariables.put("address",userlists.size());
+        // pageVariables.put("name", userlists.size());
+
+
         return pageVariables;
     }
     private List<UserDataSet> allUsers(){
