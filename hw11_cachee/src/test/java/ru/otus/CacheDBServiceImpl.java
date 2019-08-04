@@ -1,5 +1,9 @@
 package ru.otus;
 
+ hw12_webe-server
+
+
+ hw01-maven
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,4 +64,8 @@ public class CacheDBServiceImpl {
         assertThat(cache.getMissCount(), is(1));
         assertThat(cache.getHitCount(), is(0));
     }
+ hw12_webe-server
+ }
+
 }
+ hw01-maven
