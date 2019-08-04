@@ -1,5 +1,5 @@
 <configuration scan="true" scanPeriod="10 seconds">
-    <jmxConfigurator />
+    <!--<jmxConfigurator />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -9,5 +9,5 @@
 
     <root level="info">
         <appender-ref ref="STDOUT" />
-    </root>
+    </root>-->
 </configuration>
