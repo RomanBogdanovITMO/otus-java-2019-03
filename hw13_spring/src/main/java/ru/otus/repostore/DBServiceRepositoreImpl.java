@@ -4,8 +4,11 @@ import org.springframework.stereotype.Repository;
 import ru.otus.dataset.UserDataSet;
 import ru.otus.db.DBServiceHiber;
 
+import java.util.List;
+
 @Repository
 public class DBServiceRepositoreImpl implements DBServiceRepositore {
+
 
     @Override
     public void create(UserDataSet dataSet) {
@@ -14,9 +17,8 @@ public class DBServiceRepositoreImpl implements DBServiceRepositore {
     }
 
     @Override
-    public UserDataSet load(long id) {
+    public List<UserDataSet> allUsers() {
         DBServiceHiber serviceHiber = new DBServiceHiber();
-
-        return serviceHiber.load(id);
+        return serviceHiber.allUsers();
     }
 }

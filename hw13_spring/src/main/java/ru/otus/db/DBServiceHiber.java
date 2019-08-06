@@ -8,12 +8,14 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 import ru.otus.dao.UserDAO;
 import ru.otus.dataset.AddressDataSet;
 import ru.otus.dataset.PhoneDataSet;
 import ru.otus.dataset.UserDataSet;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -75,6 +77,14 @@ public class DBServiceHiber {
             R result = function.apply(session);
             transaction.commit();
             return result;
+        }
+    }
+    public List<UserDataSet> allUsers(){
+        try (Session session = sessionFactory.openSession()){
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<UserDataSet> critarial = builder.createQuery(UserDataSet.class);
+            critarial.from(UserDataSet.class);
+            return session.createQuery(critarial).list();
         }
     }
 }
