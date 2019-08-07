@@ -9,6 +9,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
+import ru.otus.db.DBServiceHiber;
 
 @Configuration
 @ComponentScan
@@ -47,4 +48,5 @@ public class WebConfig {
         viewResolver.setCharacterEncoding("UTF-8");
         return viewResolver;
     }
+
 }

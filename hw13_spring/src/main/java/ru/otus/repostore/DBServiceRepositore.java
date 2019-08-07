@@ -7,4 +7,5 @@ import java.util.List;
 public interface DBServiceRepositore {
     void create(UserDataSet dataSet);
     List<UserDataSet> allUsers();
+    UserDataSet load(long id);
 }

@@ -8,17 +8,20 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+
+import org.springframework.stereotype.Component;
 import ru.otus.dao.UserDAO;
 import ru.otus.dataset.AddressDataSet;
 import ru.otus.dataset.PhoneDataSet;
 import ru.otus.dataset.UserDataSet;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
+@Component
 public class DBServiceHiber {
     private final SessionFactory sessionFactory;
 
@@ -87,4 +90,5 @@ public class DBServiceHiber {
             return session.createQuery(critarial).list();
         }
     }
+
 }

@@ -46,9 +46,6 @@ public class AddressDataSet {
 
     @Override
     public String toString() {
-        return "AddressDataSet{" +
-                "id=" + id +
-                ", street='" + street + '\'' +
-                '}';
+        return street;
     }
 }
