@@ -25,7 +25,7 @@ public class UsersServlet extends HttpServlet {
         this.sessionFactory = sessionFactory;
     }
 
-    @Override
+   /* @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doPost(req,resp);
     }
@@ -35,7 +35,18 @@ public class UsersServlet extends HttpServlet {
         Map<String, Object> pageVariables = createPageVariablesMap();
         resp.setContentType(CONTENT_TYPE_TEXT);
         resp.getWriter().println(TemplateProcessor.instance().getPage(USER_PAGE_TEMPLATE,pageVariables));
+
+
+    }*/
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Map<String, Object> pageVariables = createPageVariablesMap();
+        resp.setContentType(CONTENT_TYPE_TEXT);
+        resp.getWriter().println(TemplateProcessor.instance().getPage(USER_PAGE_TEMPLATE,pageVariables));
+
         resp.setStatus(HttpServletResponse.SC_OK);
+
     }
 
     private Map<String, Object> createPageVariablesMap(){
