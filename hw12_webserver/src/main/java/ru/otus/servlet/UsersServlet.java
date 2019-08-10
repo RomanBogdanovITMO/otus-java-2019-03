@@ -27,9 +27,15 @@ public class UsersServlet extends HttpServlet {
 
    /* @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req,resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String, Object> pageVariables = createPageVariablesMap();
         resp.setContentType(CONTENT_TYPE_TEXT);
         resp.getWriter().println(TemplateProcessor.instance().getPage(USER_PAGE_TEMPLATE,pageVariables));
+
 
     }*/
 
@@ -38,11 +44,15 @@ public class UsersServlet extends HttpServlet {
         Map<String, Object> pageVariables = createPageVariablesMap();
         resp.setContentType(CONTENT_TYPE_TEXT);
         resp.getWriter().println(TemplateProcessor.instance().getPage(USER_PAGE_TEMPLATE,pageVariables));
+
+        resp.setStatus(HttpServletResponse.SC_OK);
+
     }
 
     private Map<String, Object> createPageVariablesMap(){
         Map<String,Object> pageVariables = new HashMap<>();
         List<UserDataSet> userlists = allUsers();
+
         try (Session session = sessionFactory.openSession()){
             for (UserDataSet list: userlists){
                 UserDataSet user1 = session.get(UserDataSet.class, list.getId());
@@ -51,6 +61,12 @@ public class UsersServlet extends HttpServlet {
                 pageVariables.put("address",user1.getAddress());
             }
         }
+        pageVariables.put("name", userlists.toString());
+        //  pageVariables.put("age", userlists.size());
+        //  pageVariables.put("address",userlists.size());
+        // pageVariables.put("name", userlists.size());
+
+
         return pageVariables;
     }
     private List<UserDataSet> allUsers(){
