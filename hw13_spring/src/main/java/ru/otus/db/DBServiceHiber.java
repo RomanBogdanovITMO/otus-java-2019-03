@@ -8,19 +8,18 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-
 import org.springframework.stereotype.Component;
 import ru.otus.dao.UserDAO;
 import ru.otus.dataset.AddressDataSet;
 import ru.otus.dataset.PhoneDataSet;
 import ru.otus.dataset.UserDataSet;
 
-import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
 @Component
 public class DBServiceHiber {
     private final SessionFactory sessionFactory;
@@ -42,7 +41,7 @@ public class DBServiceHiber {
         return sessionFactory;
     }
 
-    private static StandardServiceRegistry createServiceRegistry(Configuration configuration){
+    private static StandardServiceRegistry createServiceRegistry(Configuration configuration) {
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties()).build();
         return serviceRegistry;
@@ -62,11 +61,13 @@ public class DBServiceHiber {
             return dao.load(id);
         });
     }
+
     public String getLocalStatus() {
         return runInSession(session -> {
             return session.getTransaction().getStatus().name();
         });
     }
+
     private void runInSession(Consumer<Session> consumer) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -74,6 +75,7 @@ public class DBServiceHiber {
             transaction.commit();
         }
     }
+
     private <R> R runInSession(Function<Session, R> function) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -82,8 +84,9 @@ public class DBServiceHiber {
             return result;
         }
     }
-    public List<UserDataSet> allUsers(){
-        try (Session session = sessionFactory.openSession()){
+
+    public List<UserDataSet> allUsers() {
+        try (Session session = sessionFactory.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<UserDataSet> critarial = builder.createQuery(UserDataSet.class);
             critarial.from(UserDataSet.class);

@@ -9,10 +9,12 @@ public class AddressDAO {
     public AddressDAO(Session session) {
         this.session = session;
     }
-    public void create(AddressDataSet addressDataSet){
+
+    public void create(AddressDataSet addressDataSet) {
         session.save(addressDataSet);
     }
-    public AddressDataSet load(long id){
-        return session.load(AddressDataSet.class,id);
+
+    public AddressDataSet load(long id) {
+        return session.load(AddressDataSet.class, id);
     }
 }

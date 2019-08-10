@@ -1,6 +1,5 @@
 package ru.otus.repostore;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.otus.dataset.UserDataSet;
 import ru.otus.db.DBServiceHiber;
