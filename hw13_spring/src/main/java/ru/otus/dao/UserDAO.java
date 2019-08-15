@@ -9,11 +9,12 @@ public class UserDAO {
     public UserDAO(Session session) {
         this.session = session;
     }
-    public void create(UserDataSet userDataSet){
+
+    public void create(UserDataSet userDataSet) {
         session.save(userDataSet);
     }
 
-    public UserDataSet load(long id){
-        return session.get(UserDataSet.class,id);
+    public UserDataSet load(long id) {
+        return session.get(UserDataSet.class, id);
     }
 }

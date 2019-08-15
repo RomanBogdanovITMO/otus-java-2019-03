@@ -10,10 +10,11 @@ public class PhoneDAO {
         this.session = session;
     }
 
-    public void create(PhoneDataSet phoneDataSet){
+    public void create(PhoneDataSet phoneDataSet) {
         session.save(phoneDataSet);
     }
-    public PhoneDataSet load(long id){
-        return session.load(PhoneDataSet.class,id);
+
+    public PhoneDataSet load(long id) {
+        return session.load(PhoneDataSet.class, id);
     }
 }
