@@ -1,9 +1,7 @@
 package ru.otus.messageSystem;
 
-import org.springframework.stereotype.Component;
-
 import java.util.concurrent.atomic.AtomicInteger;
-@Component
+
 public class Address {
     private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
     private final String id;

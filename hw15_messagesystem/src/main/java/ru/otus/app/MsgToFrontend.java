@@ -1,6 +1,6 @@
 package ru.otus.app;
 
-import ru.otus.app.FrontendService;
+
 import ru.otus.messageSystem.Address;
 import ru.otus.messageSystem.Addressee;
 import ru.otus.messageSystem.Message;

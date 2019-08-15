@@ -32,6 +32,10 @@ public class UserDataSet {
 
     }
 
+    public UserDataSet(String name) {
+        Name = name;
+    }
+
     public UserDataSet(String name, int age) {
         Name = name;
         Age = age;
