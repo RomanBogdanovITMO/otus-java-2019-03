@@ -1,7 +1,7 @@
 package ru.otus.app;
 
+import org.springframework.web.bind.annotation.RestController;
 import ru.otus.app.masseg.MsgAddUser;
-import ru.otus.dataset.UserDataSet;
 import ru.otus.messageSystem.Address;
 import ru.otus.messageSystem.Message;
 import ru.otus.messageSystem.MessageSystem;
@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+@RestController
 public class FrontendServiceImpl implements FrontendService {
     private final Address address;
     private final MessageSystemContext context;

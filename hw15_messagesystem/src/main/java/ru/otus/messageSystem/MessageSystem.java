@@ -1,6 +1,6 @@
 package ru.otus.messageSystem;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,8 +9,9 @@ import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-@Component
-public final class MessageSystem {
+
+@Service
+public final   class MessageSystem {
     private final static Logger logger = Logger.getLogger(MessageSystem.class.getName());
 
     private final List<Thread> workers;

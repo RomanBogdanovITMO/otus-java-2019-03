@@ -10,7 +10,7 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
-@Configuration
+/*@Configuration
 @ComponentScan
 @EnableWebMvc
 public class WebConfig {
@@ -48,4 +48,4 @@ public class WebConfig {
         return viewResolver;
     }
 
-}
+}*/

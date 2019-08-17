@@ -15,6 +15,11 @@ public class MsgAddUser extends MsgToDB {
 
     }
 
+
+    public String getUserName() {
+        return userName;
+    }
+
     @Override
     public void exec(DBService dbService) {
         UserDataSet user = new UserDataSet(userName);

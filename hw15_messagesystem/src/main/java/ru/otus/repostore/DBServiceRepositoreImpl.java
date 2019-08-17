@@ -1,6 +1,6 @@
 package ru.otus.repostore;
 
-import org.springframework.stereotype.Repository;
+/*import org.springframework.stereotype.Repository;
 import ru.otus.dataset.UserDataSet;
 import ru.otus.db.DBServiceHiber;
 
@@ -32,4 +32,4 @@ public class DBServiceRepositoreImpl implements DBServiceRepositore {
         UserDataSet user = this.dbServiceHiber.load(id);
         return user;
     }
-}
+}*/
