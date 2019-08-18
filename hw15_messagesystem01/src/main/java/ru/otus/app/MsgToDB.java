@@ -1,6 +1,5 @@
 package ru.otus.app;
 
-import ru.otus.app.DBService;
 import ru.otus.messageSystem.Address;
 import ru.otus.messageSystem.Addressee;
 import ru.otus.messageSystem.Message;

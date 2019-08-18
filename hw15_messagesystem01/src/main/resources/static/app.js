@@ -20,7 +20,7 @@ const connect = () => {
     stompClient.connect({}, (frame) => {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/response', (greeting) => showGreeting(JSON.parse(greeting.body).messageStr));
+        stompClient.subscribe('/topic/response', (greeting) => showGreeting(JSON.parse(greeting.body).Name));
 
     });
 }
@@ -33,9 +33,9 @@ const disconnect = () => {
     console.log("Disconnected");
 }
 
-const sendName = () => stompClient.send("/app/message", {}, JSON.stringify({'messageStr': $("#message").val()}))
+const sendName = () => stompClient.send("/app/message", {}, JSON.stringify({'Name': $("#message").val()}))
 
-const showGreeting = (messageStr) => $("#chatLine").append("<tr><td>" + messageStr + "</td></tr>")
+const showGreeting = (Name) => $("#chatLine").append("<tr><td>" + Name + "</td></tr>")
 
 
 

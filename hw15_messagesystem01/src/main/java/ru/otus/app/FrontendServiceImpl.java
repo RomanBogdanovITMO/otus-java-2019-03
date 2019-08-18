@@ -1,19 +1,28 @@
 package ru.otus.app;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
 import ru.otus.app.masseg.MsgAddUser;
+import ru.otus.dataset.UserDataSet;
 import ru.otus.messageSystem.Address;
 import ru.otus.messageSystem.Message;
 import ru.otus.messageSystem.MessageSystem;
-
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-@RestController
+@Component("frservice")
 public class FrontendServiceImpl implements FrontendService {
-    private final Address address;
+
+    @Autowired @Qualifier("frontAddress")
+    private  Address address;
+
+    @Autowired
+    private SimpMessagingTemplate messageForRender;
+
     private final MessageSystemContext context;
 
 
@@ -24,7 +33,7 @@ public class FrontendServiceImpl implements FrontendService {
 
     public FrontendServiceImpl(MessageSystemContext context, Address address) {
         this.context = context;
-        this.address = address;
+
     }
 
     @Override
@@ -44,13 +53,14 @@ public class FrontendServiceImpl implements FrontendService {
     }
 
     @Override
-    public void handleRequest(String userName) {
-        Message message = new MsgAddUser(getAddress(),context.getDbAddress(),userName);
+    public void handleRequest(UserDataSet userDataSet) {
+        Message message = new MsgAddUser(getAddress(),context.getDbAddress(),userDataSet);
         context.getMessageSystem().sendMessage(message);
     }
 
     @Override
-    public void addUser(long id, String name) {
-//Нужно отправить обратно сообщение с именем usera по  websocket (верно?)
+    public void sendMessage(UserDataSet userDataSet) {
+        messageForRender.convertAndSend("/topic/response",userDataSet);
+
     }
 }

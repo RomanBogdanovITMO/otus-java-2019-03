@@ -1,13 +1,18 @@
 package ru.otus.app;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.otus.messageSystem.Address;
 import ru.otus.messageSystem.MessageSystem;
-@Component
+
+@Component("msgSystemContext")
 public class MessageSystemContext {
     private final MessageSystem messageSystem;
 
-    private Address frontAddress;
+    @Autowired @Qualifier("frontAddress")
+    private  Address frontAddress;
+    @Autowired @Qualifier("dbAddress")
     private Address dbAddress;
 
     public MessageSystemContext(MessageSystem messageSystem) {

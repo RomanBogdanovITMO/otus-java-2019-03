@@ -8,7 +8,9 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import ru.otus.app.DBService;
 import ru.otus.app.MessageSystemContext;
 import ru.otus.dao.UserDAO;
 import ru.otus.dataset.AddressDataSet;
@@ -17,7 +19,6 @@ import ru.otus.dataset.UserDataSet;
 import ru.otus.messageSystem.Address;
 import ru.otus.messageSystem.Addressee;
 import ru.otus.messageSystem.MessageSystem;
-import ru.otus.app.DBService;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -25,16 +26,20 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-@Component
+import org.springframework.stereotype.Component;
+
+@Component("dbservice")
 public class DBServiceHiber implements DBService,Addressee {
     private final SessionFactory sessionFactory;
-    private final Address address;
+
+    @Autowired @Qualifier("dbAddress")
+    private  Address address;
+
     private final MessageSystemContext context;
 
 
 
-    public DBServiceHiber(Address address, MessageSystemContext context) {
-        this.address = address;
+    public DBServiceHiber(MessageSystemContext context, Address address) {
         this.context = context;
         Configuration configuration = new Configuration()
                 .configure("hibernate.xml");
@@ -56,6 +61,9 @@ public class DBServiceHiber implements DBService,Addressee {
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties()).build();
         return serviceRegistry;
+    }
+    public void init() {
+        context.getMessageSystem().addAddressee(this);
     }
 
     @Override
