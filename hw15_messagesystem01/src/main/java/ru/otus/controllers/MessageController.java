@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.util.HtmlUtils;
 import ru.otus.dataset.UserDataSet;
 import ru.otus.messageSystem.MessageSystemStarter;
+import ru.otus.repostore.DBServiceRepositore;
 
 
 @Controller
@@ -18,12 +18,17 @@ public class MessageController {
 
     @Autowired @Qualifier("MSstarter")
     private MessageSystemStarter systemStarter;
+    private DBServiceRepositore dbServiceRepositore;
+
+    public MessageController(DBServiceRepositore dbServiceRepositore) {
+        this.dbServiceRepositore = dbServiceRepositore;
+        dbServiceRepositore.init();
+    }
 
     @MessageMapping("/message")
-    @SendTo("/topic/response")
-    public UserDataSet addUser(UserDataSet userDataSet) {
+   // @SendTo("/topic/response")
+    public void addUser(UserDataSet userDataSet) {
         logger.info("got message:{}" + userDataSet);
         systemStarter.getFrontendService().handleRequest(userDataSet);
-        return new UserDataSet(HtmlUtils.htmlEscape(userDataSet.getName()));
     }
 }

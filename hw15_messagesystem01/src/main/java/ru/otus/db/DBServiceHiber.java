@@ -10,15 +10,13 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import ru.otus.app.DBService;
 import ru.otus.app.MessageSystemContext;
 import ru.otus.dao.UserDAO;
 import ru.otus.dataset.AddressDataSet;
 import ru.otus.dataset.PhoneDataSet;
 import ru.otus.dataset.UserDataSet;
 import ru.otus.messageSystem.Address;
-import ru.otus.messageSystem.Addressee;
-import ru.otus.messageSystem.MessageSystem;
+
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -28,19 +26,20 @@ import java.util.function.Function;
 
 import org.springframework.stereotype.Component;
 
-@Component("dbservice")
-public class DBServiceHiber implements DBService,Addressee {
+@Component
+public class DBServiceHiber  {
     private final SessionFactory sessionFactory;
 
-    @Autowired @Qualifier("dbAddress")
+
     private  Address address;
 
     private final MessageSystemContext context;
 
 
 
-    public DBServiceHiber(MessageSystemContext context, Address address) {
+    public DBServiceHiber(MessageSystemContext context,@Autowired @Qualifier("dbAddress") Address address) {
         this.context = context;
+        this.address = address;
         Configuration configuration = new Configuration()
                 .configure("hibernate.xml");
         Metadata metadata = new MetadataSources(createServiceRegistry(configuration))
@@ -62,11 +61,7 @@ public class DBServiceHiber implements DBService,Addressee {
                 .applySettings(configuration.getProperties()).build();
         return serviceRegistry;
     }
-    public void init() {
-        context.getMessageSystem().addAddressee(this);
-    }
 
-    @Override
     public void create(UserDataSet dataSet) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
@@ -75,7 +70,7 @@ public class DBServiceHiber implements DBService,Addressee {
         }
     }
 
-    @Override
+
     public UserDataSet load(long id) {
         return runInSession(session -> {
             UserDAO dao = new UserDAO(session);
@@ -83,7 +78,7 @@ public class DBServiceHiber implements DBService,Addressee {
         });
     }
 
-    @Override
+
     public UserDataSet readByName(String name) {
         return runInSession(session -> {
             UserDAO dao = new UserDAO(session);
@@ -91,7 +86,7 @@ public class DBServiceHiber implements DBService,Addressee {
         });
     }
 
-    @Override
+
     public List<UserDataSet> allUsers() {
         try (Session session = sessionFactory.openSession()){
             CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -122,7 +117,7 @@ public class DBServiceHiber implements DBService,Addressee {
         }
     }
 
-    @Override
+   /* @Override
     public Address getAddress() {
         return this.address;
     }
@@ -130,5 +125,5 @@ public class DBServiceHiber implements DBService,Addressee {
     @Override
     public MessageSystem getMS() {
         return this.context.getMessageSystem();
-    }
+    }*/
 }

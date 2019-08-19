@@ -4,14 +4,14 @@ const setConnected = (connected) => {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
     if (connected) {
-        $("#chatLine").show();
+        $("#userLine").show();
 
     }
     else {
-        $("#chatLine").hide();
+        $("#userLine").hide();
 
     }
-    $("#message").html("");
+    $("#users").html("");
 
 }
 
@@ -20,7 +20,7 @@ const connect = () => {
     stompClient.connect({}, (frame) => {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/response', (greeting) => showGreeting(JSON.parse(greeting.body).Name));
+        stompClient.subscribe('/topic/response', (users) => showUser(JSON.parse(users.body)));
 
     });
 }
@@ -33,9 +33,9 @@ const disconnect = () => {
     console.log("Disconnected");
 }
 
-const sendName = () => stompClient.send("/app/message", {}, JSON.stringify({'Name': $("#message").val()}))
+const sendUser = () => stompClient.send("/app/message", {}, JSON.stringify({'Name': $("#name").val()}))
 
-const showGreeting = (Name) => $("#chatLine").append("<tr><td>" + Name + "</td></tr>")
+const showUser = (users) => $("#userLine").append("<tr><td>" + users.name + "</td></tr>")
 
 
 
@@ -45,6 +45,6 @@ $(function () {
     });
     $("#connect").click(connect);
     $("#disconnect").click(disconnect);
-    $("#send").click(sendName);
+    $("#send").click(sendUser);
 
 });

@@ -18,6 +18,7 @@ public class UserDataSet {
 
     private int Age;
 
+
     @Embedded
     @Target(PhoneDataSet.class)
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -74,6 +75,7 @@ public class UserDataSet {
     public void setAge(int age) {
         this.Age = age;
     }
+
 
     public  PhoneDataSet getPhone(){
         return phoneDataSetList.get(0);

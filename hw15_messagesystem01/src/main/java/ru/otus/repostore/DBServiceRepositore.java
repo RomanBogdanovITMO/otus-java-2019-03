@@ -1,11 +1,13 @@
 package ru.otus.repostore;
 
-/*import ru.otus.dataset.UserDataSet;
+import ru.otus.dataset.UserDataSet;
+import ru.otus.messageSystem.Addressee;
 
 import java.util.List;
 
-public interface DBServiceRepositore {
+public interface DBServiceRepositore extends Addressee {
     void create(UserDataSet dataSet);
-    List<UserDataSet> allUsers();
     UserDataSet load(long id);
-}*/
+    List<UserDataSet> allUsers();
+    public void init();
+}

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.otus.app.FrontendServiceImpl;
-import ru.otus.db.DBServiceHiber;
 
 @Component("MSstarter")
 public class MessageSystemStarter {
@@ -19,8 +18,7 @@ public class MessageSystemStarter {
     @Autowired @Qualifier("frservice")
     private FrontendServiceImpl frontendService;
 
-    @Autowired @Qualifier("dbservice")
-    private DBServiceHiber dbServiceHiber;
+
 
     public FrontendServiceImpl getFrontendService() {
         return frontendService;
@@ -28,7 +26,6 @@ public class MessageSystemStarter {
 
     public void go(){
         frontendService.init();
-        dbServiceHiber.init();
         messageSystem.start();
     }
 

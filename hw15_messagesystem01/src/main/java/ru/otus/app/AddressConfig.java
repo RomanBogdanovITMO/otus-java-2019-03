@@ -17,4 +17,5 @@ public class AddressConfig {
     public Address  dbAddress() {
         return new Address("dbAddress");
     }
+
 }

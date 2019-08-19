@@ -1,5 +1,6 @@
 package ru.otus.app;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -10,16 +11,13 @@ import ru.otus.messageSystem.Address;
 import ru.otus.messageSystem.Message;
 import ru.otus.messageSystem.MessageSystem;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 
 @Component("frservice")
 public class FrontendServiceImpl implements FrontendService {
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(FrontendServiceImpl.class);
 
-    @Autowired @Qualifier("frontAddress")
     private  Address address;
-
     @Autowired
     private SimpMessagingTemplate messageForRender;
 
@@ -28,11 +26,9 @@ public class FrontendServiceImpl implements FrontendService {
 
     private static Logger log = Logger.getLogger("Frontend");
 
-    private final Map<Integer, String> users = new HashMap<>();
-
-
-    public FrontendServiceImpl(MessageSystemContext context, Address address) {
+    public FrontendServiceImpl(MessageSystemContext context, @Autowired @Qualifier("frontAddress")Address address) {
         this.context = context;
+        this.address = address;
 
     }
 
@@ -60,7 +56,9 @@ public class FrontendServiceImpl implements FrontendService {
 
     @Override
     public void sendMessage(UserDataSet userDataSet) {
+        logger.info("got message:{}" + userDataSet.getName());
         messageForRender.convertAndSend("/topic/response",userDataSet);
 
     }
+
 }

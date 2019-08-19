@@ -1,6 +1,8 @@
 package ru.otus.messageSystem;
 
 import org.springframework.stereotype.Component;
+
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.logging.Logger;
 @Component("MS")
 public final   class MessageSystem {
     private final static Logger logger = Logger.getLogger(MessageSystem.class.getName());
+
 
     private final List<Thread> workers;
     private final Map<Address, LinkedBlockingQueue<Message>> messagesMap;
@@ -29,7 +32,9 @@ public final   class MessageSystem {
     }
 
     public void sendMessage(Message message) {
+        logger.info("got message:{}" + message.getTo().getId());
         messagesMap.get(message.getTo()).add(message);
+        logger.info("got message:{}" + messagesMap);
     }
 
 
@@ -55,6 +60,8 @@ public final   class MessageSystem {
             workers.add(thread);
         }
     }
+
+
 
     public void dispose() {
         workers.forEach(Thread::interrupt);
