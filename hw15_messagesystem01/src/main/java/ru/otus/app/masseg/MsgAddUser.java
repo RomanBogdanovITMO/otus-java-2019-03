@@ -2,24 +2,26 @@ package ru.otus.app.masseg;
 
 
 
+import ru.otus.app.DBService;
 import ru.otus.app.MsgToDB;
-import ru.otus.dataset.UserDataSet;
-import ru.otus.messageSystem.Address;
-import ru.otus.repostore.DBServiceRepositore;
+import ru.otus.controllers.UserDTO;
+import ru.otus.dataset.UserDataS;
+import ru.otus.ms.messageSystem.Address;
+
 
 public class MsgAddUser extends MsgToDB {
 
-    private UserDataSet userDataSet;
+    private final UserDTO userDto;
 
-    public MsgAddUser(Address from, Address to, UserDataSet userDataSet) {
+
+    public MsgAddUser(Address from, Address to, UserDTO userDto) {
         super(from, to);
-        this.userDataSet = userDataSet;
-
+        this.userDto =  userDto;
     }
-
+//Добавляем в базу и отправляем на front
     @Override
-    public void exec(DBServiceRepositore dbService) {
-        dbService.create(userDataSet);
-        dbService.getMS().sendMessage(new MsgAddUserAnswer(getTo(), getFrom(),userDataSet));
+    public void exec(DBService dbService) {
+        UserDataS user = dbService.getUser(userDto);
+        dbService.getMS().sendMessage(new MsgAddUserAnswer(getTo(), getFrom(),userDto));
     }
 }

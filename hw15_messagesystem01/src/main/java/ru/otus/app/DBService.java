@@ -1,14 +1,12 @@
 package ru.otus.app;
 
+import ru.otus.controllers.UserDTO;
+import ru.otus.dataset.UserDataS;
+import ru.otus.ms.messageSystem.Addressee;
 
-import ru.otus.dataset.UserDataSet;
-import ru.otus.messageSystem.Addressee;
 
-import java.util.List;
+public interface DBService extends Addressee {
+    void init();
 
-/*public interface DBService extends Addressee {
-    void create(UserDataSet dataSet);
-    UserDataSet load(long id);
-    UserDataSet readByName(String name);
-    List<UserDataSet> allUsers();
-}*/
+    UserDataS getUser(UserDTO userDto);
+}

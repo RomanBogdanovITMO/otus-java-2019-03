@@ -1,7 +1,4 @@
-package ru.otus.messageSystem;
-
-import org.springframework.stereotype.Component;
-
+package ru.otus.ms.messageSystem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +8,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Component("MS")
-public final   class MessageSystem {
+public final class MessageSystem {
     private final static Logger logger = Logger.getLogger(MessageSystem.class.getName());
-
 
     private final List<Thread> workers;
     private final Map<Address, LinkedBlockingQueue<Message>> messagesMap;
@@ -32,13 +27,13 @@ public final   class MessageSystem {
     }
 
     public void sendMessage(Message message) {
-        logger.info("got message:{}" + message.getTo().getId());
+        //добавляем в  Queue
         messagesMap.get(message.getTo()).add(message);
-        logger.info("got message:{}" + messagesMap);
     }
 
 
     public void start() {
+        logger.info("MessageSystem start");
         for (Map.Entry<Address, Addressee> entry : addresseeMap.entrySet()) {
             String name = "MS-worker-" + entry.getKey().getId();
             Thread thread = new Thread(() -> {
@@ -48,8 +43,8 @@ public final   class MessageSystem {
                         try {
                             Message message = queue.take(); //Blocks
                             message.exec(entry.getValue());
-                        } catch (InterruptedException e) {
-                            logger.log(Level.INFO, "Thread interrupted. Finishing: " + name);
+                        } catch (Exception e) {
+                            logger.log(Level.WARNING, e.getLocalizedMessage());
                             return;
                         }
                     }
@@ -60,8 +55,6 @@ public final   class MessageSystem {
             workers.add(thread);
         }
     }
-
-
 
     public void dispose() {
         workers.forEach(Thread::interrupt);

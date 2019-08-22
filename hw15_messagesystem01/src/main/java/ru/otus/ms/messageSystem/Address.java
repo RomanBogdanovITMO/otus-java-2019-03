@@ -1,8 +1,8 @@
-package ru.otus.messageSystem;
+package ru.otus.ms.messageSystem;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Address {
+public final class Address {
     private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
     private final String id;
 

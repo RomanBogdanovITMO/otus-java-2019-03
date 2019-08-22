@@ -1,9 +1,9 @@
 package ru.otus.app;
 
-import ru.otus.messageSystem.Address;
-import ru.otus.messageSystem.Addressee;
-import ru.otus.messageSystem.Message;
-import ru.otus.repostore.DBServiceRepositore;
+
+import ru.otus.ms.messageSystem.Address;
+import ru.otus.ms.messageSystem.Addressee;
+import ru.otus.ms.messageSystem.Message;
 
 public abstract class MsgToDB extends Message {
     public MsgToDB(Address from, Address to) {
@@ -12,9 +12,11 @@ public abstract class MsgToDB extends Message {
 
     @Override
     public void exec(Addressee addressee) {
-        if (addressee instanceof DBServiceRepositore) {
-            exec((DBServiceRepositore) addressee);
+        if (addressee instanceof DBService) {
+            exec((DBService) addressee);
         }
     }
-    public abstract void exec(DBServiceRepositore dbService);
+
+    public abstract void exec(DBService dbService);
 }
+

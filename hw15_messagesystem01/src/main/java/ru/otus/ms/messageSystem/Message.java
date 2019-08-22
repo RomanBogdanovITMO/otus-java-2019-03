@@ -1,5 +1,8 @@
-package ru.otus.messageSystem;
+package ru.otus.ms.messageSystem;
 
+/**
+ * @author tully
+ */
 public abstract class Message {
     private final Address from;
     private final Address to;
