@@ -50,6 +50,8 @@ public class DBServiceImpl implements DBService {
         return context.getMessageSystem();
     }
 
+    //вы предлогали сделать UserDataS getUser(String userName)-- а как мне тогда добавить адрес для user?
+    //user.setAddress(new ru.otus.dataset.Address(userDto.getAddress()));
     public UserDataS getUser(UserDTO userDto) {
         UserDataS user = new UserDataS();
         user.setName(userDto.getName());

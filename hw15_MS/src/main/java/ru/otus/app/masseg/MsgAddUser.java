@@ -23,5 +23,13 @@ public class MsgAddUser extends MsgToDB {
     public void exec(DBService dbService) {
         UserDataS user = dbService.getUser(userDto);
         dbService.getMS().sendMessage(new MsgAddUserAnswer(getTo(), getFrom(),userDto));
+        // ваш комментарий" Отправка должна быть снаружи сообщения." Но в лекции по MS  от
+        //Vitaly Kutsenko именно так делается ----
+       /* @Override
+        public void exec(DBService dbService) {
+            int id = dbService.getUserId(login);
+            dbService.getMS().sendMessage(new MsgGetUserIdAnswer(getTo(), getFrom(), login, id));
+        }*/
+        // или я что то не понимаю?
     }
 }
