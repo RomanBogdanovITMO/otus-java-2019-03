@@ -29,6 +29,11 @@ public class DBServiceImpl implements DBService {
 
     private final UserDaoImpl userDao;
 
+    private String userName;
+
+    private String userAddress;
+
+
     public DBServiceImpl(MessageSystemContext context, @Qualifier("DB") Address address, UserDaoImpl userDao){
         this.context=context;
         this.address=address;
@@ -50,12 +55,25 @@ public class DBServiceImpl implements DBService {
         return context.getMessageSystem();
     }
 
-    //вы предлогали сделать UserDataS getUser(String userName)-- а как мне тогда добавить адрес для user?
-    //user.setAddress(new ru.otus.dataset.Address(userDto.getAddress()));
-    public UserDataS getUser(UserDTO userDto) {
+    public UserDataS getUser() {
         UserDataS user = new UserDataS();
-        user.setName(userDto.getName());
-        user.setAddress(new ru.otus.dataset.Address(userDto.getAddress()));
+        user.setName(userName);
+        user.setAddress(new ru.otus.dataset.Address(userAddress));
         return userDao.save(user);
     }
+
+
+
+    @Override
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+
+    @Override
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
+    }
+
+
 }
