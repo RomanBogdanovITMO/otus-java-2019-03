@@ -35,6 +35,7 @@ public class UsersServlet extends HttpServlet {
         Map<String, Object> pageVariables = createPageVariablesMap();
         resp.setContentType(CONTENT_TYPE_TEXT);
         resp.getWriter().println(TemplateProcessor.instance().getPage(USER_PAGE_TEMPLATE,pageVariables));
+ 
 
 
     }*/
@@ -46,6 +47,10 @@ public class UsersServlet extends HttpServlet {
         resp.getWriter().println(TemplateProcessor.instance().getPage(USER_PAGE_TEMPLATE,pageVariables));
 
         resp.setStatus(HttpServletResponse.SC_OK);
+
+ 
+
+
 
     }
 
