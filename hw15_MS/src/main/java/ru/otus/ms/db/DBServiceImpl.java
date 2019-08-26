@@ -7,7 +7,6 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import ru.otus.app.DBService;
 import ru.otus.app.MessageSystemContext;
-import ru.otus.controllers.UserDTO;
 import ru.otus.dao.UserDaoImpl;
 import ru.otus.dataset.UserDataS;
 import ru.otus.ms.messageSystem.Address;
