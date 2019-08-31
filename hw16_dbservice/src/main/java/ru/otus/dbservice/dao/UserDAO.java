@@ -1,6 +1,8 @@
-package ru.otus.dao;
+package ru.otus.dbservice.dao;
 
-import ru.otus.dataset.DataSet;
+
+
+import ru.otus.message_server.dataset.DataSet;
 
 import java.util.List;
 
