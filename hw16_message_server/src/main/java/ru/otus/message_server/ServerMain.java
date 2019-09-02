@@ -16,8 +16,8 @@ import java.util.logging.Logger;
 public class ServerMain {
     private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
 
-    private static final String DBSERVICE_START_COMMAND = "java -jar ../hw16_dbservice/target/hw16_dbservice-1.0-SNAPSHOT.jar";
-    private static final String FRONT_START_COMMAND = "java -jar ../hw16_frontend/target/hw16_frontend-1.0-SNAPSHOT.jar";
+    private static final String DBSERVICE_START_COMMAND = "java -jar ../hw16_dbservice/target/hw16_dbservice-1.0-SNAPSHOT.jar ";
+    private static final String FRONT_START_COMMAND = "java -jar ../hw16_frontend/target/hw16_frontend-1.0-SNAPSHOT.jar ";
     private static final int CLIENT_START_DELAY_SEC = 5;
 
     public static void main(String[] args) throws Exception {
@@ -25,9 +25,8 @@ public class ServerMain {
     }
     private void start() throws Exception {
         ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-       // startClient(executorService, DBSERVICE_START_COMMAND);
-      //  startClient(executorService, FRONT_START_COMMAND);
-        //если запускать по отдельности каждое приложение (все работает)
+        startClient(executorService, DBSERVICE_START_COMMAND);
+        startClient(executorService, FRONT_START_COMMAND);
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         ObjectName name = new ObjectName("ru.otus:type=Server");
         MessageSystem server = new MessageSystem();

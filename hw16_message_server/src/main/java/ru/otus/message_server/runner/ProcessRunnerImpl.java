@@ -42,8 +42,8 @@ public class ProcessRunnerImpl implements ProcessRunner {
 
         StreamListener output = new StreamListener(process.getInputStream(),"OUTPUT");
 
+        output.start();
         System.out.println(process.isAlive());
-
         return process;
     }
 
