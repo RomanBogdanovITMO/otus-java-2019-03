@@ -1,31 +1,48 @@
-package ru.otus.dao;
+package ru.otus.dbservice.dao;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import ru.otus.dataset.DataSet;
-import ru.otus.dataset.UserDataS;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import ru.otus.message_server.dataset.Address;
+import ru.otus.message_server.dataset.DataSet;
+import ru.otus.message_server.dataset.Phone;
+import ru.otus.message_server.dataset.UserDataS;
 
-import javax.persistence.EntityManagerFactory;
+
 import java.util.List;
 import java.util.function.Function;
 
-@Repository
+
 public class UserDaoImpl implements UserDAO {
     private SessionFactory sessionFactory;
 
-    @Autowired
-    public UserDaoImpl(EntityManagerFactory factory) {
-        if(factory.unwrap(SessionFactory.class) == null){
+
+    public UserDaoImpl() {
+      /*  if(factory.unwrap(SessionFactory.class) == null){
             throw new NullPointerException("factory is not a hibernate factory");
         }
-        this.sessionFactory = factory.unwrap(SessionFactory.class);
+        this.sessionFactory = factory.unwrap(SessionFactory.class);*/
+        Configuration configuration = new Configuration()
+                .configure("hibernat.xml");
+        Metadata metadata = new MetadataSources(createServiceRegistry(configuration))
+                .addAnnotatedClass(Address.class)
+                .addAnnotatedClass(Phone.class)
+                .addAnnotatedClass(UserDataS.class)
+                .getMetadataBuilder()
+                .build();
+        sessionFactory = metadata.getSessionFactoryBuilder().build();
     }
-
-
+    private static StandardServiceRegistry createServiceRegistry(Configuration configuration){
+        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                .applySettings(configuration.getProperties()).build();
+        return serviceRegistry;
+    }
     @Override
     public <T extends DataSet> List<T> getAll() {
         return runInSession(session -> {

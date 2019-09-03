@@ -1,14 +1,20 @@
-package ru.otus.dao;
+package ru.otus.dbservice.dao;
 
-import lombok.RequiredArgsConstructor;
+
 import org.hibernate.Session;
-import ru.otus.dataset.DataSet;
-import ru.otus.dataset.UserDataS;
+import ru.otus.message_server.dataset.DataSet;
+import ru.otus.message_server.dataset.UserDataS;
+
 
 import java.util.List;
-@RequiredArgsConstructor
+
+
 public class DataSetDAOImpl implements DataSetDAO {
     private final Session session;
+
+    public DataSetDAOImpl(Session session) {
+        this.session = session;
+    }
 
     @Override
     public <T extends DataSet> T save(T dataset) {
