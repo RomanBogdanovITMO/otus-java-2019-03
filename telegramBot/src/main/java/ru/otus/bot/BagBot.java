@@ -54,6 +54,7 @@ public class BagBot extends TelegramLongPollingBot {
         int valueList = listsQuestionAndA.size();
         int count = 0;
 
+
         if (message != null && message.hasText()) {
             String textUser = message.getText();
             logger.info("message user request: " + "id " + message.getChatId() + ": " + textUser);
