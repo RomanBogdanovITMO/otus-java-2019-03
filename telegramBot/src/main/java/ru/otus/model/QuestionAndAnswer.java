@@ -2,15 +2,17 @@ package ru.otus.model;
 
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
 
 @Document(collection = "QuestionsAndAnswers")
 public class QuestionAndAnswer {
-
+    @Transient
+    public static final String SEQUENCE_NAME = "users_sequence";
     @Id
-    private Integer id;
+    private long id;
 
     private String question;
 
@@ -21,7 +23,7 @@ public class QuestionAndAnswer {
     public QuestionAndAnswer() {
     }
 
-    public QuestionAndAnswer(Integer id,String question, String answer, String info) {
+    public QuestionAndAnswer(long id,String question, String answer, String info) {
         this.question = question;
         this.answer = answer;
         this.id = id;
@@ -40,7 +42,7 @@ public class QuestionAndAnswer {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
