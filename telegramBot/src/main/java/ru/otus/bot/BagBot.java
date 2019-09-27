@@ -1,8 +1,6 @@
 package ru.otus.bot;
 
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
@@ -16,6 +14,7 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import ru.otus.ApplicationConfiguration;
 import ru.otus.model.QuestionAndAnswer;
 import ru.otus.repository.QuestionAndAnswerRepository;
 import ru.otus.util.PropertiesHelper;
@@ -28,22 +27,25 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 @Component
-@EnableConfigurationProperties
-@ConfigurationProperties
 public class BagBot extends TelegramLongPollingBot {
     private final static Logger logger = Logger.getLogger(BagBot.class.getName());
-    private final static String BOT_USER_NAME;
+    /*private final static String BOT_USER_NAME;
     private final static String TOKEN;
     private final static String CHECK_FLAG;
+    private final static String PATH_THE_PHOTO;*/
+
+    @Autowired
+    private ApplicationConfiguration myConfog;
 
     private QuestionAndAnswerRepository repository;
 
-    static {
+    /*static {
         Properties properties = PropertiesHelper.getProperties("telegrambot.properties");
         BOT_USER_NAME = properties.getProperty("telegrambot.botUserName");
         TOKEN = properties.getProperty("telegrambot.token");
         CHECK_FLAG = properties.getProperty("telegrambot.checkFlag");
-    }
+        PATH_THE_PHOTO = properties.getProperty("telegrambot.pathThePhoto");
+    }*/
 
     public BagBot(QuestionAndAnswerRepository repository) {
 
@@ -82,7 +84,7 @@ public class BagBot extends TelegramLongPollingBot {
                         update.getCallbackQuery().getData())
                         .setChatId(update.getCallbackQuery().getMessage().getChatId()));
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                logger.warning(e.getMessage());
             }
 
         }
@@ -92,10 +94,8 @@ public class BagBot extends TelegramLongPollingBot {
     //обрабатывается запрос клиента если найдено совпадение , выгружаем список фото данному запросу
     private void requestOfUserForBag(String textUser, Message message, List<QuestionAndAnswer> questionAndAnswerList) {
 
-        logger.info("check flag  " + CHECK_FLAG);
         for (QuestionAndAnswer list : questionAndAnswerList) {
-            if ((list.getQuestion().equals(textUser)) && (list.getAnswer().equals(CHECK_FLAG))) {
-                logger.info(list.getQuestion() + " " + textUser + " " + list.getAnswer() + " " + CHECK_FLAG);
+            if ((list.getQuestion().equals(textUser)) && (list.getAnswer().equals(myConfog.getCHECK_FLAG()))) {
                 getListBag(message, list.getAdditionInfo());
                 break;
             }
@@ -106,8 +106,9 @@ public class BagBot extends TelegramLongPollingBot {
     //получаем список фотографий из dir-static на основе запроса клиента
     private void getListBag(Message message, String questionAndAnswer) {
 
-        String nameDirectory = questionAndAnswer;
-        File myfile = new File("C:\\otus-java-2019-03- 01\\telegramBot\\src\\main\\resources\\static\\" + nameDirectory);
+        //String nameDirectory = PATH_THE_PHOTO + questionAndAnswer;
+        String nameDirectory = myConfog.getPATH_THE_PHOTO() + questionAndAnswer;
+        File myfile = new File(nameDirectory);
         File[] files = myfile.listFiles();
         List<File> listFiles = Arrays.asList(files);
 
@@ -196,12 +197,12 @@ public class BagBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return BOT_USER_NAME;
+        return  myConfog.getBOT_USER_NAME();
     }
 
     @Override
     public String getBotToken() {
-        return TOKEN;
+        return myConfog.getTOKEN();
     }
 
 

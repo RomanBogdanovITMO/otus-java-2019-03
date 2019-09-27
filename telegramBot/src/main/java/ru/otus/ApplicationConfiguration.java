@@ -1,6 +1,8 @@
 package ru.otus;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -11,7 +13,61 @@ import ru.otus.repository.QuestionAndAnswerRepository;
 
 @EnableMongoRepositories(basePackageClasses = QuestionAndAnswerRepository.class)
 @Configuration
+@EnableConfigurationProperties
+@ConfigurationProperties
 public class ApplicationConfiguration {
+
+    private  String PROXY;
+    private  String CHECK;
+    private  String SOCKS_HOST;
+    private  String HOST;
+    private  String SOCKS_PORT;
+    private  String PORT;
+
+    private  String BOT_USER_NAME;
+    private  String TOKEN;
+    private  String CHECK_FLAG;
+    private  String PATH_THE_PHOTO;
+
+    public String getPROXY() {
+        return PROXY;
+    }
+
+    public String getCHECK() {
+        return CHECK;
+    }
+
+    public String getSOCKS_HOST() {
+        return SOCKS_HOST;
+    }
+
+    public String getHOST() {
+        return HOST;
+    }
+
+    public String getSOCKS_PORT() {
+        return SOCKS_PORT;
+    }
+
+    public String getPORT() {
+        return PORT;
+    }
+
+    public String getBOT_USER_NAME() {
+        return BOT_USER_NAME;
+    }
+
+    public String getTOKEN() {
+        return TOKEN;
+    }
+
+    public String getCHECK_FLAG() {
+        return CHECK_FLAG;
+    }
+
+    public String getPATH_THE_PHOTO() {
+        return PATH_THE_PHOTO;
+    }
 
     @Bean
     public TelegramBotsApi telegramBotsApi() {

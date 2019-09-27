@@ -5,11 +5,14 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+
 @Component
 public class BotInitilizer {
 
     private TelegramBotsApi telegramBotsApi;
     private BagBot bagBot;
+
+
 
     @Autowired
     public BotInitilizer(BagBot bagBot,TelegramBotsApi telegramBotsApi){

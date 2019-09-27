@@ -1,0 +1,24 @@
+spring:
+ application:
+    proxy: proxySet
+    check: true
+    socksHost: socksProxyHost
+    host: 127.0.0.1
+    socksPort: socksProxyPort
+    port: 9150
+    botUserName: SumkiRomanBot
+    token: 861995581:AAH7sqrDvmZKj6TSFB7LoLUjtzlbvhPSTKE
+    checkFlag: added
+    pathThePhoto: C:/woman_bag/
+
+ spring:
+   data:
+     mongodb:
+      host: localhost
+      port: 27017
+      database: roman
+      repositories:
+      enabled: true
+
+server:
+       port: 8095
