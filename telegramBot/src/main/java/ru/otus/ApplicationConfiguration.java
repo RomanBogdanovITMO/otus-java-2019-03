@@ -49,49 +49,49 @@ public class ApplicationConfiguration {
                     "#7ц - большая цветная #8ц - средняя цветная #9ц - маленькая цветная", ""));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "7ч", "добавлено", "big_black_bag"));
+                    "7ч", "added", "big_black_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "8б", "добавлено", "medium_black_bag"));
+                    "8ч", "added", "medium_black_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "9б", "добавлено", "small_black_bag"));
+                    "9ч", "added", "small_black_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "7ц", "добавлено", "big_color_bag"));
+                    "7ц", "added", "big_color_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "8ц", "добавлено", "medium_color_bag"));
+                    "8ц", "added", "medium_color_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "9ц", "добавлено", "small_color_bag"));
+                    "9ц", "added", "small_color_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "7б", "добавлено", "big_white_bag"));
+                    "7б", "added", "big_white_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "8б", "добавлено", "medium_white_bag"));
+                    "8б", "added", "medium_white_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "9б", "добавлено", "small_white_bag"));
+                    "9б", "added", "small_white_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
                     "/выбрать сумку", "5-по размеру #6-по цвету", ""));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "7", "добавлено", "big_bag"));
+                    "7", "added", "big_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "8", "добавлено", "medium_bag"));
+                    "8", "added", "medium_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "9", "добавлено", "small_bag"));
+                    "9", "added", "small_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "10", "добавлено", "all_bag"));
+                    "10", "added", "all_bag"));
 
             andAnswerRepository.save(new QuestionAndAnswer(service.generateSequence(QuestionAndAnswer.SEQUENCE_NAME),
-                    "/показать все", "добавлено", "all_bag"));
+                    "/показать все", "added", "all_bag"));
         };
     }
 

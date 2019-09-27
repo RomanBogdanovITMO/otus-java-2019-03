@@ -1,5 +1,6 @@
 package ru.otus;
 
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -16,6 +17,7 @@ public class Application {
     private static final String SOCKS_PORT;
     private static final String PORT;
 
+
     static {
         ApiContextInitializer.init();
         Properties properties = PropertiesHelper.getProperties("telegrambot.properties");
@@ -27,11 +29,12 @@ public class Application {
         PORT = properties.getProperty("telegrambot.port");
 
     }
+
     public static void main(String[] args) {
         //простые настройки для обхода блокировки в телеграме
-        System.getProperties().put( PROXY, CHECK );
-        System.getProperties().put( SOCKS_HOST, HOST );
-        System.getProperties().put( SOCKS_PORT, PORT );
+        System.getProperties().put(PROXY, CHECK);
+        System.getProperties().put(SOCKS_HOST, HOST);
+        System.getProperties().put(SOCKS_PORT, PORT);
 
         SpringApplication.run(Application.class, args);
     }

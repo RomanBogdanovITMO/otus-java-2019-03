@@ -1,6 +1,8 @@
 package ru.otus.bot;
 
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
@@ -26,11 +28,13 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 @Component
+@EnableConfigurationProperties
+@ConfigurationProperties
 public class BagBot extends TelegramLongPollingBot {
     private final static Logger logger = Logger.getLogger(BagBot.class.getName());
     private final static String BOT_USER_NAME;
     private final static String TOKEN;
-
+    private final static String CHECK_FLAG;
 
     private QuestionAndAnswerRepository repository;
 
@@ -38,10 +42,11 @@ public class BagBot extends TelegramLongPollingBot {
         Properties properties = PropertiesHelper.getProperties("telegrambot.properties");
         BOT_USER_NAME = properties.getProperty("telegrambot.botUserName");
         TOKEN = properties.getProperty("telegrambot.token");
-
+        CHECK_FLAG = properties.getProperty("telegrambot.checkFlag");
     }
 
     public BagBot(QuestionAndAnswerRepository repository) {
+
         this.repository = repository;
 
     }
@@ -50,18 +55,20 @@ public class BagBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
 
         Message message = update.getMessage();
+        logger.info("id users: " + message.getChatId());
         List<QuestionAndAnswer> listsQuestionAndA = repository.findAll();
         int valueList = listsQuestionAndA.size();
         int count = 0;
-
+        int v = 0;
 
         if (message != null && message.hasText()) {
             String textUser = message.getText();
+            logger.info("user request: " + textUser);
             for (QuestionAndAnswer lists : listsQuestionAndA) {
-                logger.info("id question: " + lists.getId());
                 count++;
+                v++;
                 if (lists.getQuestion().equals(textUser)) {
-                    requestOfUserForBag(lists, textUser, message);
+                    requestOfUserForBag(textUser, message, listsQuestionAndA);
                     sendMSG(message, getParserString(lists.getAnswer()));
                     logger.info("server response: " + lists.getAnswer());
                     break;
@@ -79,19 +86,17 @@ public class BagBot extends TelegramLongPollingBot {
             }
 
         }
+        logger.info("count: " + v);
     }
 
     //обрабатывается запрос клиента если найдено совпадение , выгружаем список фото данному запросу
-    private void requestOfUserForBag(QuestionAndAnswer questionAnd, String textUser, Message message) {
-        String[] nameComands = {"7","8","9","7б","8б","9б","7ч","8ч","9ч","7ц","8ц","9ц","10"};
-        List<String> stringList = Arrays.asList(nameComands);
+    private void requestOfUserForBag(String textUser, Message message, List<QuestionAndAnswer> questionAndAnswerList) {
 
-        for (String list: stringList){
-            if (list.equals(textUser)){
-                getListBag(message,questionAnd);
-                break;
-            }else if (("/показать все".equals(textUser)) || (list.equals(textUser))){
-                getListBag(message,questionAnd);
+        logger.info("check flag  " + CHECK_FLAG);
+        for (QuestionAndAnswer list : questionAndAnswerList) {
+            if ((list.getQuestion().equals(textUser)) && (list.getAnswer().equals(CHECK_FLAG))) {
+                logger.info(list.getQuestion() + " " + textUser + " " + list.getAnswer() + " " + CHECK_FLAG);
+                getListBag(message, list.getAdditionInfo());
                 break;
             }
         }
@@ -99,9 +104,9 @@ public class BagBot extends TelegramLongPollingBot {
     }
 
     //получаем список фотографий из dir-static на основе запроса клиента
-    private void getListBag(Message message, QuestionAndAnswer questionAndAnswer) {
+    private void getListBag(Message message, String questionAndAnswer) {
 
-        String nameDirectory = questionAndAnswer.getAdditionInfo();
+        String nameDirectory = questionAndAnswer;
         File myfile = new File("C:\\otus-java-2019-03- 01\\telegramBot\\src\\main\\resources\\static\\" + nameDirectory);
         File[] files = myfile.listFiles();
         List<File> listFiles = Arrays.asList(files);
@@ -170,12 +175,13 @@ public class BagBot extends TelegramLongPollingBot {
 
         replyKeyboardMarkup.setKeyboard(keyboardRowlist);
     }
+
     //формируем клавиатуру с кнопкой(клавиатура не постоянного типа, формируется при просмотре сумок )
     private SendMessage setButtons1(long chatId) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
-        inlineKeyboardButton1.setText("показат");
+        inlineKeyboardButton1.setText("показать");
         inlineKeyboardButton1.setCallbackData("Button \"Тык\" has been pressed");
 
 
@@ -197,5 +203,6 @@ public class BagBot extends TelegramLongPollingBot {
     public String getBotToken() {
         return TOKEN;
     }
+
 
 }
