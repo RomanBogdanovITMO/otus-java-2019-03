@@ -14,61 +14,50 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
-import ru.otus.ApplicationConfiguration;
+import ru.otus.config.ApplicationConfiguration;
 import ru.otus.model.QuestionAndAnswer;
-import ru.otus.repository.QuestionAndAnswerRepository;
-import ru.otus.util.PropertiesHelper;
+
+import ru.otus.servis.SequenceGeneratorService;
+
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 @Component
 public class BagBot extends TelegramLongPollingBot {
     private final static Logger logger = Logger.getLogger(BagBot.class.getName());
-    /*private final static String BOT_USER_NAME;
-    private final static String TOKEN;
-    private final static String CHECK_FLAG;
-    private final static String PATH_THE_PHOTO;*/
 
     @Autowired
-    private ApplicationConfiguration myConfog;
+    private ApplicationConfiguration myConfig;
 
-    private QuestionAndAnswerRepository repository;
+    private SequenceGeneratorService service;
 
-    /*static {
-        Properties properties = PropertiesHelper.getProperties("telegrambot.properties");
-        BOT_USER_NAME = properties.getProperty("telegrambot.botUserName");
-        TOKEN = properties.getProperty("telegrambot.token");
-        CHECK_FLAG = properties.getProperty("telegrambot.checkFlag");
-        PATH_THE_PHOTO = properties.getProperty("telegrambot.pathThePhoto");
-    }*/
 
-    public BagBot(QuestionAndAnswerRepository repository) {
-
-        this.repository = repository;
-
+    public BagBot(SequenceGeneratorService service, ApplicationConfiguration myConfig) {
+        this.service = service;
+        this.myConfig = myConfig;
     }
+
 
     @Override
     public void onUpdateReceived(Update update) {
 
         Message message = update.getMessage();
-        logger.info("id users: " + message.getChatId());
-        List<QuestionAndAnswer> listsQuestionAndA = repository.findAll();
+       // logger.info("id users: " + message.getChatId());
+        List<QuestionAndAnswer> listsQuestionAndA = service.getAll();
         int valueList = listsQuestionAndA.size();
         int count = 0;
-        int v = 0;
+
 
         if (message != null && message.hasText()) {
+            logger.info("id users: " + message.getChatId());
             String textUser = message.getText();
             logger.info("user request: " + textUser);
             for (QuestionAndAnswer lists : listsQuestionAndA) {
                 count++;
-                v++;
                 if (lists.getQuestion().equals(textUser)) {
                     requestOfUserForBag(textUser, message, listsQuestionAndA);
                     sendMSG(message, getParserString(lists.getAnswer()));
@@ -88,14 +77,14 @@ public class BagBot extends TelegramLongPollingBot {
             }
 
         }
-        logger.info("count: " + v);
+
     }
 
     //обрабатывается запрос клиента если найдено совпадение , выгружаем список фото данному запросу
     private void requestOfUserForBag(String textUser, Message message, List<QuestionAndAnswer> questionAndAnswerList) {
 
         for (QuestionAndAnswer list : questionAndAnswerList) {
-            if ((list.getQuestion().equals(textUser)) && (list.getAnswer().equals(myConfog.getCHECK_FLAG()))) {
+            if ((list.getQuestion().equals(textUser)) && (list.getAnswer().equals(myConfig.getCHECK_FLAG()))) {
                 getListBag(message, list.getAdditionInfo());
                 break;
             }
@@ -106,8 +95,7 @@ public class BagBot extends TelegramLongPollingBot {
     //получаем список фотографий из dir-static на основе запроса клиента
     private void getListBag(Message message, String questionAndAnswer) {
 
-        //String nameDirectory = PATH_THE_PHOTO + questionAndAnswer;
-        String nameDirectory = myConfog.getPATH_THE_PHOTO() + questionAndAnswer;
+        String nameDirectory = myConfig.getPATH_THE_PHOTO() + questionAndAnswer;
         File myfile = new File(nameDirectory);
         File[] files = myfile.listFiles();
         List<File> listFiles = Arrays.asList(files);
@@ -129,7 +117,7 @@ public class BagBot extends TelegramLongPollingBot {
     //создаем новую строку(ответ) взятую из бд(ответ) и возвращаем ответ для клиента
     private String getParserString(String text) {
         String resaultParserString = "";
-        for (String str : text.split("#")) {
+        for (String str : text.split("_")) {
             String value = str.trim();
             resaultParserString += value + "\n";
         }
@@ -183,7 +171,7 @@ public class BagBot extends TelegramLongPollingBot {
 
         InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
         inlineKeyboardButton1.setText("показать");
-        inlineKeyboardButton1.setCallbackData("Button \"Тык\" has been pressed");
+        inlineKeyboardButton1.setCallbackData("описание скоро будет");
 
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
@@ -197,12 +185,12 @@ public class BagBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return  myConfog.getBOT_USER_NAME();
+        return myConfig.getBOT_USER_NAME();
     }
 
     @Override
     public String getBotToken() {
-        return myConfog.getTOKEN();
+        return myConfig.getTOKEN();
     }
 
 

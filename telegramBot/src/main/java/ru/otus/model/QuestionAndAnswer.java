@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
-
 @Document(collection = "QuestionsAndAnswers")
 public class QuestionAndAnswer {
     @Transient
@@ -23,7 +22,7 @@ public class QuestionAndAnswer {
     public QuestionAndAnswer() {
     }
 
-    public QuestionAndAnswer(long id,String question, String answer, String info) {
+    public QuestionAndAnswer(long id, String question, String answer, String info) {
         this.question = question;
         this.answer = answer;
         this.id = id;
@@ -65,9 +64,10 @@ public class QuestionAndAnswer {
     @Override
     public String toString() {
         return "QuestionAndAnswer{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", question='" + question + '\'' +
                 ", answer='" + answer + '\'' +
+                ", additionInfo='" + additionInfo + '\'' +
                 '}';
     }
 }

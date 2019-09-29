@@ -3,6 +3,7 @@ package ru.otus.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+//генерация ID
 @Document(collection = "database_sequences")
 public class DatabaseSequence {
     @Id
@@ -17,6 +18,7 @@ public class DatabaseSequence {
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }

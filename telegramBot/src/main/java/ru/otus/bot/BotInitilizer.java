@@ -13,12 +13,11 @@ public class BotInitilizer {
     private BagBot bagBot;
 
 
-
     @Autowired
-    public BotInitilizer(BagBot bagBot,TelegramBotsApi telegramBotsApi){
-        try{
+    public BotInitilizer(BagBot bagBot, TelegramBotsApi telegramBotsApi) {
+        try {
             telegramBotsApi.registerBot(bagBot);
-        } catch (TelegramApiException ex){
+        } catch (TelegramApiException ex) {
             ex.printStackTrace();
         }
 
