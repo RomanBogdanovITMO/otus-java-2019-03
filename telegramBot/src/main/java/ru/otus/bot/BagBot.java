@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.api.methods.send.SendVideo;
+import org.telegram.telegrambots.api.objects.CallbackQuery;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -45,37 +47,43 @@ public class BagBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
 
-        Message message = update.getMessage();
-       // logger.info("id users: " + message.getChatId());
-        List<QuestionAndAnswer> listsQuestionAndA = service.getAll();
-        int valueList = listsQuestionAndA.size();
-        int count = 0;
+        if (update.hasMessage()) {
+            Message message = update.getMessage();
+            List<QuestionAndAnswer> listsQuestionAndA = service.getAll();
+            int valueList = listsQuestionAndA.size();
+            int count = 0;
 
 
-        if (message != null && message.hasText()) {
-            logger.info("id users: " + message.getChatId());
-            String textUser = message.getText();
-            logger.info("user request: " + textUser);
-            for (QuestionAndAnswer lists : listsQuestionAndA) {
-                count++;
-                if (lists.getQuestion().equals(textUser)) {
-                    requestOfUserForBag(textUser, message, listsQuestionAndA);
-                    sendMSG(message, getParserString(lists.getAnswer()));
-                    logger.info("server response: " + lists.getAnswer());
-                    break;
-                } else if (count == valueList) {
-                    sendMSG(message, "извините, данная команда в разработке или запрос не корректный");
+            if (message != null && message.hasText()) {
+                logger.info("id users: " + message.getChatId());
+                String textUser = message.getText();
+                logger.info("user request: " + textUser);
+                for (QuestionAndAnswer lists : listsQuestionAndA) {
+                    count++;
+                    if (lists.getQuestion().equals(textUser)) {
+                        requestOfUserForBag(textUser, message, listsQuestionAndA);
+                        sendMSG(message, getParserString(lists.getAnswer()));
+                        logger.info("server response: " + lists.getAnswer());
+                        break;
+                    } else if (count == valueList) {
+                        sendMSG(message, "извините, данная команда в разработке или запрос не корректный");
+
+                    }
                 }
+            } else if (update.hasCallbackQuery()) {
+                try {
+                    execute(new SendMessage().setText(
+                            update.getCallbackQuery().getData())
+                            .setChatId(update.getCallbackQuery().getMessage().getChatId()));
+                } catch (TelegramApiException e) {
+                    logger.warning(e.getMessage());
+                }
+
             }
         } else if (update.hasCallbackQuery()) {
-            try {
-                execute(new SendMessage().setText(
-                        update.getCallbackQuery().getData())
-                        .setChatId(update.getCallbackQuery().getMessage().getChatId()));
-            } catch (TelegramApiException e) {
-                logger.warning(e.getMessage());
-            }
-
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+            Message message = callbackQuery.getMessage();
+            getVideo(message, callbackQuery.getData());
         }
 
     }
@@ -105,12 +113,18 @@ public class BagBot extends TelegramLongPollingBot {
         sendPhoto.setReplyToMessageId(message.getMessageId());
 
         for (File list : listFiles) {
-            try {
-                sendPhoto(sendPhoto.setNewPhoto(list));
-                execute(setButtons1(message.getChatId()));
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+            String[] arrm = list.getName().split("\\.");
+            for (String str : arrm) {
+                if (str.equals("png")) {
+                    try {
+                        sendPhoto(sendPhoto.setNewPhoto(list));
+                        execute(setButtons1(message.getChatId(), list.getPath()));
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+
         }
     }
 
@@ -166,13 +180,12 @@ public class BagBot extends TelegramLongPollingBot {
     }
 
     //формируем клавиатуру с кнопкой(клавиатура не постоянного типа, формируется при просмотре сумок )
-    private SendMessage setButtons1(long chatId) {
+    private SendMessage setButtons1(long chatId, String nameFile) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton inlineKeyboardButton1 = new InlineKeyboardButton();
         inlineKeyboardButton1.setText("показать");
-        inlineKeyboardButton1.setCallbackData("описание скоро будет");
-
+        inlineKeyboardButton1.setCallbackData(nameFile);
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
         keyboardButtonsRow1.add(inlineKeyboardButton1);
@@ -180,6 +193,28 @@ public class BagBot extends TelegramLongPollingBot {
         rowList.add(keyboardButtonsRow1);
         inlineKeyboardMarkup.setKeyboard(rowList);
         return new SendMessage().setChatId(chatId).setText("Описание сумки").setReplyMarkup(inlineKeyboardMarkup);
+    }
+
+    //отправляем видео (видео обзор сумки) в качестве дополнительного описания сумки
+    private void getVideo(Message message, String nameFile) {
+
+        String deletValue = ".png";
+        String addValue = ".mp4";
+        StringBuffer buffer = new StringBuffer(nameFile);
+        buffer.delete(buffer.length() - deletValue.length(), buffer.length());
+        buffer.append(addValue);
+        String nameFileVideo = buffer.toString();
+
+        SendVideo sendVideo = new SendVideo();
+        sendVideo.setChatId(message.getChatId().toString());
+        sendVideo.setReplyToMessageId(message.getMessageId());
+
+        File file = new File(nameFileVideo);
+        try {
+            sendVideo(sendVideo.setNewVideo(file));
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
 
