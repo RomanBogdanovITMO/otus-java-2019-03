@@ -198,8 +198,8 @@ public class BagBot extends TelegramLongPollingBot {
     //отправляем видео (видео обзор сумки) в качестве дополнительного описания сумки
     private void getVideo(Message message, String nameFile) {
 
-        String deletValue = ".png";
-        String addValue = ".mp4";
+        String deletValue = myConfig.getTYPE_FILE_PNG();
+        String addValue = myConfig.getTYPE_FILE_MP4();
         StringBuffer buffer = new StringBuffer(nameFile);
         buffer.delete(buffer.length() - deletValue.length(), buffer.length());
         buffer.append(addValue);
@@ -210,10 +210,14 @@ public class BagBot extends TelegramLongPollingBot {
         sendVideo.setReplyToMessageId(message.getMessageId());
 
         File file = new File(nameFileVideo);
-        try {
-            sendVideo(sendVideo.setNewVideo(file));
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
+        if (file.isFile()&& file.exists()) {
+            try {
+                sendVideo(sendVideo.setNewVideo(file));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }else {
+            sendMSG(message,"нет описания");
         }
     }
 
