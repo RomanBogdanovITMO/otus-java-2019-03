@@ -1,0 +1,23 @@
+spring:
+  profiles: prod
+proxy: proxySet
+check: true
+socksHost: socksProxyHost
+host: 127.0.0.1
+socksPort: socksProxyPort
+port: 9150
+botUserName:
+token:
+checkFlag: added
+pathThePhoto: C:/woman_bag/
+
+data:
+ mongodb:
+  host: localhost
+  port: 27017
+  database: roman
+  repositories:
+  enabled: true
+
+server:
+       port: 8080
