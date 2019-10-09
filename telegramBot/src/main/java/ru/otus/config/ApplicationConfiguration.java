@@ -23,6 +23,25 @@ public class ApplicationConfiguration {
     private String TOKEN;
     private String CHECK_FLAG;
     private String PATH_THE_PHOTO;
+    private String TYPE_FILE_PNG;
+    private String TYPE_FILE_MP4;
+
+    public String getTYPE_FILE_PNG() {
+        return TYPE_FILE_PNG;
+    }
+
+    public void setTYPE_FILE_PNG(String TYPE_FILE_PNG) {
+        this.TYPE_FILE_PNG = TYPE_FILE_PNG;
+    }
+
+    public String getTYPE_FILE_MP4() {
+        return TYPE_FILE_MP4;
+    }
+
+    public void setTYPE_FILE_MP4(String TYPE_FILE_MP4) {
+        this.TYPE_FILE_MP4 = TYPE_FILE_MP4;
+    }
+
 
     public String getPROXY() {
         return PROXY;

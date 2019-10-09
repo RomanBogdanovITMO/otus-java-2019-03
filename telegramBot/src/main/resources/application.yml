@@ -6,10 +6,12 @@ socksHost: socksProxyHost
 host: 127.0.0.1
 socksPort: socksProxyPort
 port: 9150
-botUserName:
-token:
+botUserName: SumkiRomanBot
+token: 861995581:AAH7sqrDvmZKj6TSFB7LoLUjtzlbvhPSTKE
 checkFlag: added
 pathThePhoto: C:/woman_bag/
+typeFilePng: .png
+typeFileMp4: .mp4
 
 data:
  mongodb:
