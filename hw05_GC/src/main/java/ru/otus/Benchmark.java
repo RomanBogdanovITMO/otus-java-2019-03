@@ -15,7 +15,7 @@ import java.util.TimerTask;
 public class Benchmark implements BenchmarkMBean {
 
     private volatile int size = 100;
-    private static GcInfo gcInfo = new GcInfo();
+    private static final GcInfo gcInfo = new GcInfo();
 
     void  run() throws InterruptedException {
 
