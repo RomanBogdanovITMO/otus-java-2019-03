@@ -7,9 +7,13 @@ import ru.otus.annotation.Test;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class TestRunner {
-    public static void runTests(String className) throws ClassNotFoundException {
+
+    static Logger logger = Logger.getLogger(TestRunner.class.getName());
+
+    public static void runTests(final String className) throws ClassNotFoundException {
         Class<?> testClass = Class.forName(className);
         try {
             Method[] methods = testClass.getDeclaredMethods();
@@ -32,18 +36,16 @@ public class TestRunner {
             }
 
             if (!testMethods.isEmpty()) {
-                System.out.println("Start tests for the class: " + className);
+                logger.info("Start tests for the class: " + className);
             } else {
-                System.out.println(" tests not found in the class: " + className);
+                logger.info(" tests not found in the class: " + className);
                 return;
             }
 
-            int successTests = 0;
 
             for (Method testMethod : testMethods) {
                 try {
                     Object testObject = testClass.getDeclaredConstructor().newInstance();
-                    successTests++;
 
                     for (Method method : beforeMethods) {
                         method.invoke(testObject);
@@ -55,14 +57,13 @@ public class TestRunner {
                         method.invoke(testObject);
                     }
                 } catch (Exception e) {
-                    System.out.println("test failed: " + e.getCause().getMessage());
-                    successTests--;
+                    logger.warning("test failed: " + e.getCause().getMessage());
                 }
             }
 
 
         } catch (Throwable e) {
-            System.out.println(e.getMessage());
+            logger.warning(e.getMessage());
         }
 
     }
