@@ -2,10 +2,10 @@ package ru.otus.visitor;
 
 import ru.otus.atm.ATM;
 
-public class RestoreIntitialATMState implements Visitor {
+public class RestoreInitialATMState implements Visitor {
 
     @Override
-    public void visit(ATM atm) {
+    public void visit(final ATM atm) {
         atm.restoreInitialATMState();
     }
 }

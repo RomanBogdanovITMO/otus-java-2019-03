@@ -1,20 +1,25 @@
 package ru.otus.atm;
 
 import ru.otus.memento.ATMMemento;
-import ru.otus.visitor.DepartametnElement;
+import ru.otus.visitor.DepartmentElement;
 import ru.otus.visitor.Visitor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
-public class ATM implements DepartametnElement {
-    public   Map<Valuta,Integer> cell;
-    private  ATMMemento atmMemento;
+
+public class ATM implements DepartmentElement {
+
+    static Logger logger = Logger.getLogger(ATM.class.getName());
+
+    public final Map<Valuta,Integer> cell;
+    private ATMMemento atmMemento;
 
     public enum Valuta {
-       STO(),
-       DVESTI(),
-       PIYTSOT();
+       ONE_HUNDRED(),
+       TWO_HUNDRED(),
+       FIVE_HUNDRED();
 
     }
 
@@ -33,21 +38,17 @@ public class ATM implements DepartametnElement {
         atmMemento = new ATMMemento(new ATM(this));
     }
 
-    public void start(String tittle, String countMoney, Operation operation){
+    public void start(final String tittle, final String countMoney, final Operation operation){
 
         operation.action(tittle, countMoney,cell);
     }
 
     public void restoreInitialATMState() {
-        ATM initStateAtm = atmMemento.getSavedState();
+        final ATM initStateAtm = atmMemento.getSavedState();
         cell.clear();
         cell.putAll(initStateAtm.cell);
-        System.out.println(cell);
-//        ATMType1 initStateAtm = initialState.getSavedState();
-//        cells.clear();
-//        cells.putAll(initStateAtm.cells);
-//        withdrawOrder.clear();
-//        withdrawOrder.addAll(initStateAtm.withdrawOrder);
+
+        logger.info(cell.toString());
     }
 
     @Override

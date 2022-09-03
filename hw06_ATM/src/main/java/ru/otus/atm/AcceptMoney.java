@@ -1,10 +1,14 @@
 package ru.otus.atm;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class AcceptMoney implements Operation {
+
+    static Logger logger = Logger.getLogger(AcceptMoney.class.getName());
+
     @Override
-    public void action(String title, String money,Map<ATM.Valuta,Integer> map) {
+    public void action(final String title, final String money,final Map<ATM.Valuta,Integer> map) {
         int count = 0;
         for (Map.Entry<ATM.Valuta,Integer> entry: map.entrySet()){
             if (entry.getKey().toString().equals(money)){
@@ -13,6 +17,6 @@ public class AcceptMoney implements Operation {
             }
         }
 
-        System.out.println(title + " " + map);
+        logger.info(title + " " + map);
     }
 }

@@ -1,16 +1,16 @@
 package ru.otus.memento;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import ru.otus.atm.ATM;
 
+@Data
+@AllArgsConstructor
 public class ATMMemento {
+
     private final ATM atm;
 
-
-    public ATMMemento(ATM atm) {
-        this.atm = atm;
-    }
-
-    public ATM getSavedState(){
+    public ATM getSavedState() {
         return atm;
     }
 }

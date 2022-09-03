@@ -2,5 +2,5 @@ package ru.otus.atm;
 import java.util.Map;
 
 public interface Operation {
-    void action(String title, String money, Map<ATM.Valuta,Integer> map);
+    void action(final String title, final String money, final Map<ATM.Valuta,Integer> map);
 }

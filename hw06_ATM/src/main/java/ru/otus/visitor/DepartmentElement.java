@@ -1,5 +1,7 @@
 package ru.otus.visitor;
 
-public interface DepartametnElement {
+public interface DepartmentElement {
+
  void accept(Visitor visitor);
+
 }
