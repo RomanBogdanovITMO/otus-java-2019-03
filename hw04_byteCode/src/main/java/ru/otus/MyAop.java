@@ -9,20 +9,21 @@ import java.util.*;
 
 public class MyAop {
 
-    static MyinterfacClass creatMyClass() {
-        InvocationHandler handler = new DemoInvocationHandler(new Demo());
 
-        return (MyinterfacClass) Proxy.newProxyInstance(MyAop.class.getClassLoader(),
-                new Class<?>[]{MyinterfacClass.class}, handler);
+    static Calculator creatMyClass() {
+        InvocationHandler handler = new DemoInvocationHandler(new DemoCalculatorImpl());
+
+        return (Calculator) Proxy.newProxyInstance(MyAop.class.getClassLoader(),
+                new Class<?>[]{Calculator.class}, handler);
     }
 
     static class DemoInvocationHandler implements InvocationHandler {
 
-        private final MyinterfacClass myClass;
+        private final Calculator myClass;
         private Set<String> setMethods;
 
 
-        DemoInvocationHandler(MyinterfacClass myClass) {
+        DemoInvocationHandler(final Calculator myClass) {
             this.myClass = myClass;
             Class<?> clazz = myClass.getClass();
             setMethods = new HashSet<>();
@@ -37,10 +38,11 @@ public class MyAop {
             }
         }
 
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
 
-            if (setMethods.contains(method.getName()))
+            if (setMethods.contains(method.getName())) {
                 System.out.println("executed method: " + method.getName() + ", param:" + method.getParameterCount());
+            }
 
             return method.invoke(myClass, args);
         }

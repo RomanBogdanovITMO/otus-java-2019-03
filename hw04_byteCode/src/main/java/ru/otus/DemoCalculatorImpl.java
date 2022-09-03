@@ -1,19 +1,19 @@
 package ru.otus;
 
-public class Demo implements MyinterfacClass  {
+public class DemoCalculatorImpl implements Calculator {
     @log
     @Override
-    public void calcul1(int number) {
+    public void getCalculator1(int number) {
         System.out.println(number);
     }
     @log
     @Override
-    public void calcul2(int n) {
+    public void getCalculator2(int n) {
         System.out.println(n);
     }
 
     @Override
-    public void zaraza(int s) {
+    public void getCalculator3(int s) {
         System.out.println("Your number: " + s);
     }
 
