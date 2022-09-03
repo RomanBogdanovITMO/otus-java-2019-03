@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReflectionHelper {
-    public static <T> T createInstance(ResultSet resultSet, Class<T> clazz) throws SQLException, NoSuchMethodException,
+    public static <T> T createInstance(final ResultSet resultSet, final Class<T> clazz) throws SQLException, NoSuchMethodException,
             IllegalAccessException, InvocationTargetException, InstantiationException {
 
         if (resultSet.next()) {
-            T instance = clazz.getDeclaredConstructor().newInstance();
-            Field[] declaredFields = clazz.getDeclaredFields();
+            final T instance = clazz.getDeclaredConstructor().newInstance();
+            final Field[] declaredFields = clazz.getDeclaredFields();
             for (Field field : declaredFields) {
                 field.setAccessible(true);
                 field.set(instance, resultSet.getObject(field.getName()));
@@ -25,12 +25,12 @@ public class ReflectionHelper {
         return null;
     }
 
-    public static List<Object> getParamObgect(Object object) throws IllegalAccessException {
+    public static List<Object> getParamObject(final Object object) throws IllegalAccessException {
 
-        List<Object> paramObjects = new ArrayList<>();
+        final List<Object> paramObjects = new ArrayList<>();
 
-        Class<?> clazz = object.getClass();
-        Field[] fields = clazz.getDeclaredFields();
+        final Class<?> clazz = object.getClass();
+        final Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
             if (field.getAnnotation(MyId.class) == null) {

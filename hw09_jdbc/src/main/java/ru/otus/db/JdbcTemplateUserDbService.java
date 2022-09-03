@@ -3,25 +3,28 @@ package ru.otus.db;
 import ru.otus.dao.User;
 
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class JdbcTemplateUserDbService implements UserDBService {
 
+    static Logger logger = Logger.getLogger(JdbcTemplateUserDbService.class.getName());
+
     public JdbcTemplateUserDbService() throws SQLException {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(H2DBConnection.getConnection());
+        final JdbcTemplate jdbcTemplate = new JdbcTemplate(H2DBConnection.getConnection());
         jdbcTemplate.createTables(H2DBConnection.getConnection());
     }
 
     @Override
-    public User create(User user) throws SQLException, IllegalAccessException {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(H2DBConnection.getConnection());
+    public void create(User user) throws SQLException, IllegalAccessException {
+        final JdbcTemplate jdbcTemplate = new JdbcTemplate(H2DBConnection.getConnection());
         jdbcTemplate.create(user);
-        return user;
     }
 
     @Override
     public User load(User user) throws SQLException {
-        System.out.println(user.getId());
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(H2DBConnection.getConnection());
-        return  (User) jdbcTemplate.load(user.getId(),User.class);
+        logger.info("execute method load user: " + user.getId());
+
+        final JdbcTemplate<User> jdbcTemplate = new JdbcTemplate<>(H2DBConnection.getConnection());
+        return jdbcTemplate.load(user.getId(),User.class);
     }
 }

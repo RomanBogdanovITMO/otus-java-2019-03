@@ -6,7 +6,8 @@ import java.sql.SQLException;
 
 
 public interface UserDBService {
-    User create(User user) throws SQLException, IllegalAccessException;
+
+    void create(User user) throws SQLException, IllegalAccessException;
     User load(User user) throws SQLException;
 
 }
