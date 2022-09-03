@@ -1,8 +1,10 @@
 package ru.otus.visitor;
 
 
-import ru.otus.atm.ATM;
+import ru.otus.atm.ATMNew;
+
 // сам visitor для атм
 public interface Visitor {
-    void visit(ATM atm);
+
+    void visit(final ATMNew atm);
 }

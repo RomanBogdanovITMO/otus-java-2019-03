@@ -6,54 +6,50 @@ import ru.otus.visitor.Visitor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
-public class ATM implements DepartametnElement {
-    public Map<BILLS, Integer> cell;
+public class ATMNew implements DepartametnElement {
+
+    static Logger logger = Logger.getLogger(AcceptMoney.class.getName());
+
+    public final Map<BILLS, Integer> cell;
     private ATMMemento atmMemento;
 
-//конструктор который создает атм с пустыми ячецками (для записи в мементо) паттерн мементо
- hw09_jdbc
-    public ATM(ATM atm) {
+    //конструктор который создает атм с пустыми ячецками (для записи в мементо) паттерн мементо
+    public ATMNew(ATMNew atm) {
         cell = new HashMap<>();
         for (BILLS s : BILLS.values()) {
             cell.put(s, 0);
         }
+    }
 
-public ATM(ATM atm) {
-    cell = new HashMap<>();
-    for (BILLS s : BILLS.values()) {
-        cell.put(s, 0);
- hw01-maven
-    }
-}
     //в месте с обьектом формируется ячейки с валютами и и обьект мементо .
-    public ATM() {
+    public ATMNew() {
         cell = new HashMap<>();
         for (BILLS s : BILLS.values()) {
             cell.put(s, 0);
         }
-        atmMemento = new ATMMemento(new ATM(this));
+        atmMemento = new ATMMemento(new ATMNew(this));
     }
- hw09_jdbc
-//метод для вызова нужных операций "AcceptMoney, IssueBalance, GiveMoney" используется полиморфизм
 
     //метод для вызова нужных операций "AcceptMoney, IssueBalance, GiveMoney" используется полиморфизм
- hw01-maven
-    public void start(String tittle, int countMoney, Operation operation) {
+    public void start(final String tittle, final int countMoney, final Operation operation) {
 
         operation.action(tittle, countMoney, cell);
     }
+
     // метод восстанавливает состояние ATM до начального
     public void restoreInitialATMState() {
-        ATM initStateAtm = atmMemento.getSavedState();
-        System.out.println("first " + cell);
+        final ATMNew initStateAtm = atmMemento.getSavedState();
+        logger.info("first " + cell);
+
         cell.clear();
         cell.putAll(initStateAtm.cell);
-        System.out.println(cell);
+        logger.info(cell.toString());
     }
 
     @Override
-    public void accept(Visitor visitor) {
+    public void accept(final Visitor visitor) {
         visitor.visit(this);
     }
 }

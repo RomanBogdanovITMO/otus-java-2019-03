@@ -1,14 +1,20 @@
 package ru.otus.atm;
 
 import java.util.Map;
+import java.util.logging.Logger;
+
 // принимать банкноты разных номиналов (полиморфизм)
 public class AcceptMoney implements Operation {
+
+    static Logger logger = Logger.getLogger(AcceptMoney.class.getName());
+
     @Override
-    public void action(String title, int money, Map<BILLS, Integer> map) {
+    public void action(final String title, final int money, final Map<BILLS, Integer> map) {
         int countMoneyInIssue = 0;
         int countMoneyBefore = 0;
         int countMoneyAfter = 0;
-        for (Map.Entry<BILLS, Integer> entry : map.entrySet()){
+
+        for (Map.Entry<BILLS, Integer> entry : map.entrySet()) {
             countMoneyBefore += entry.getValue();
         }
         for (Map.Entry<BILLS, Integer> entry : map.entrySet()) {
@@ -18,11 +24,10 @@ public class AcceptMoney implements Operation {
             }
             countMoneyAfter += entry.getValue();
         }
-        if (countMoneyBefore == countMoneyAfter){
-            System.out.println("May be you have not correct BILLS: " + money);
+        if (countMoneyBefore == countMoneyAfter) {
+            logger.info("May be you have not correct BILLS: " + money);
         }
 
-
-        System.out.println(title + " " + map);
+        logger.info(title + " " + map);
     }
 }

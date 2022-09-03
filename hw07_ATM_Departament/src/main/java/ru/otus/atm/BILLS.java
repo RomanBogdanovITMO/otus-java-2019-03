@@ -1,9 +1,10 @@
 package ru.otus.atm;
 
+
 public enum BILLS {
-    BILLS_STO(100),
-    BILLS_DVESTI(200),
-    BILLS_PIYTSOT(300);
+    BILLS_ONE_HUNDRED(100),
+    BILLS_TWO_HUNDRED(200),
+    BILLS_THREE_HUNDRED(300);
     private int value;
 
     BILLS(int value) {

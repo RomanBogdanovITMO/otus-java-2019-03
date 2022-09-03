@@ -1,57 +1,37 @@
 package ru.otus;
 
-import ru.otus.atm.ATM;
+import ru.otus.atm.ATMNew;
 import ru.otus.atm.AcceptMoney;
 import ru.otus.atm.GiveMoney;
 import ru.otus.atm.IssueBalance;
-import ru.otus.deprtament.DepartamentATM;
+import ru.otus.deprtament.DepartmentATM;
 
 public class ATMDemo {
     public static void main(String[] args) {
-        ATM atm = new ATM();
-        ATM atm1 = new ATM();
- hw09_jdbc
-       // DepartamentATM departamentATM = new DepartamentATM();
-
-        // DepartamentATM departamentATM = new DepartamentATM();
- hw01-maven
+        final ATMNew atm = new ATMNew();
+        final ATMNew atm1 = new ATMNew();
+        DepartmentATM departmentATM = new DepartmentATM();
 
         int banknote = 100;
         int banknote1 = 200;
 
         atm.start("AcceptMoney", banknote, new AcceptMoney());
-        atm.start("GiveMoney",banknote,new GiveMoney());
- hw09_jdbc
-      //  departamentATM.addAtm(atm);
-       // departamentATM.restoreAllATM();
+        departmentATM.addAtm(atm);
+        departmentATM.restoreAllATM();
         System.out.println("_____________");
-      // atm.start("AcceptMoney", banknote, new AcceptMoney());
-      //  atm1.start("AcceptMoney", banknote1, new AcceptMoney());
+        atm.start("AcceptMoney", banknote1, new AcceptMoney());
 
-        //  departamentATM.addAtm(atm);
-        // departamentATM.restoreAllATM();
-        System.out.println("_____________");
-        // atm.start("AcceptMoney", banknote, new AcceptMoney());
-        //  atm1.start("AcceptMoney", banknote1, new AcceptMoney());
- hw01-maven
+        atm1.start("AcceptMoney", banknote1, new AcceptMoney());
 
 
         atm.start("IssueBalance", banknote, new IssueBalance());
 
 
- hw09_jdbc
-       // departamentATM.addAtm(atm);
-      //  departamentATM.addAtm(atm1);
+        // departmentATM.addAtm(atm);
+        departmentATM.addAtm(atm1);
 
-      //  departamentATM.getBalance();
-      //  departamentATM.restoreAllATM();
-
-        // departamentATM.addAtm(atm);
-        //  departamentATM.addAtm(atm1);
-
-        //  departamentATM.getBalance();
-        //  departamentATM.restoreAllATM();
- hw01-maven
+        departmentATM.getBalance();
+        departmentATM.restoreAllATM();
 
     }
 }
