@@ -2,7 +2,6 @@ package ru.otus;
 
 import com.sun.management.GarbageCollectionNotificationInfo;
 
-import javax.management.Notification;
 import javax.management.NotificationEmitter;
 import javax.management.NotificationListener;
 import javax.management.openmbean.CompositeData;
@@ -22,8 +21,8 @@ public class Benchmark implements BenchmarkMBean {
 
         installGCMonitoring();
         //Print GC data every 60 seconds
-        Timer t = new Timer();
-        t.schedule(new TimerTask() {
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 gcInfo.printData();
@@ -31,8 +30,8 @@ public class Benchmark implements BenchmarkMBean {
         }, 60000, 60000);
 
 
-        Timer t2 = new Timer();
-        t2.schedule(new TimerTask() {
+        final Timer timer1 = new Timer();
+        timer1.schedule(new TimerTask() {
             @Override
             public void run() {
                 System.exit(0);
@@ -40,7 +39,7 @@ public class Benchmark implements BenchmarkMBean {
         },124000);
 
 
-        List<String> array = new ArrayList<>();
+        final List<String> array = new ArrayList<>();
         while (true) {
             for (int i = 0; i < size; i++) {
                 array.add(new String(new char[i]));
@@ -55,22 +54,15 @@ public class Benchmark implements BenchmarkMBean {
         List<GarbageCollectorMXBean> gcBeans = ManagementFactory.getGarbageCollectorMXBeans();
         for (GarbageCollectorMXBean gcBean : gcBeans) {
             NotificationEmitter emitter = (NotificationEmitter) gcBean;
-            NotificationListener listener = new NotificationListener() {
-                @Override
-                public void handleNotification(Notification notification, Object handback) {
-                    if (notification.getType().equals(GarbageCollectionNotificationInfo.GARBAGE_COLLECTION_NOTIFICATION)) {
-                        GarbageCollectionNotificationInfo info = GarbageCollectionNotificationInfo.from((CompositeData) notification.getUserData());
-                        gcInfo.addNotification(info);
-                    }
+            NotificationListener listener = (notification, handback) -> {
+                if (notification.getType().equals(GarbageCollectionNotificationInfo.GARBAGE_COLLECTION_NOTIFICATION)) {
+                    GarbageCollectionNotificationInfo info = GarbageCollectionNotificationInfo.from((CompositeData) notification.getUserData());
+                    gcInfo.addNotification(info);
                 }
             };
 
             emitter.addNotificationListener(listener, null, null);
         }
-    }
-    @Override
-    public int getSize() {
-        return size;
     }
 
     @Override

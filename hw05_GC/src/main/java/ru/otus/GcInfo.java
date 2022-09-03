@@ -1,32 +1,38 @@
 package ru.otus;
+
 import com.sun.management.GarbageCollectionNotificationInfo;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
+@Data
+@AllArgsConstructor
 public class GcInfo {
-    public GcInfo() {
-    }
 
-    private List<GcStats> youngGenList = new ArrayList<>();
-    private List<GcStats> oldGenList = new ArrayList<>();
+    static Logger logger = Logger.getLogger(GcInfo.class.getName());
+
+    private final List<GcStats> youngGenList = new ArrayList<>();
+    private final List<GcStats> oldGenList = new ArrayList<>();
 
 
-    public void addNotification(GarbageCollectionNotificationInfo info) {
+    public void addNotification(final GarbageCollectionNotificationInfo info) {
         if (getType(info).equals("Young Generation")) {
-            GcStats stats = new GcStats();
-            stats.setName(info.getGcName());
-            stats.setDuration(info.getGcInfo().getDuration());
-            youngGenList.add(stats);
+            youngGenList.add(GcStats.builder()
+                    .name(info.getGcName())
+                    .duration(info.getGcInfo().getDuration())
+                    .build());
         } else {
-            GcStats stats = new GcStats();
-            stats.setName(info.getGcName());
-            stats.setDuration(info.getGcInfo().getDuration());
-            oldGenList.add(stats);
+            oldGenList.add(GcStats.builder()
+                    .name(info.getGcName())
+                    .duration(info.getGcInfo().getDuration())
+                    .build());
         }
     }
 
-    private String getType(GarbageCollectionNotificationInfo info) {
+    private String getType(final GarbageCollectionNotificationInfo info) {
         String type = info.getGcAction();
         if (type.equals("end of minor GC")) {
             type = "Young Generation";
@@ -37,34 +43,34 @@ public class GcInfo {
     }
 
     public void printData() {
-        System.out.println("Printing GC stats once a minute:");
+        logger.info("Printing GC stats once a minute:");
 
         if (youngGenList.isEmpty() && oldGenList.isEmpty()) {
-            System.out.println("No statistics for the minute");
+            logger.info("No statistics for the minute");
             return;
         }
 
         if (!youngGenList.isEmpty()) {
-            String youngGenName = youngGenList.get(0).getName();
+            final String youngGenName = youngGenList.get(0).getName();
             long youngGenDuration = 0;
             for (GcStats stats : youngGenList) {
                 youngGenDuration += stats.getDuration();
             }
             long averageYoungGenDuration = youngGenDuration / youngGenList.size();
 
-            System.out.println(String.format("%s. Name : %s, Count %s, Total duration : %s ms, Avg duration : %s ms",
-                    "Young Generation", youngGenName, youngGenList.size(), youngGenDuration, averageYoungGenDuration));
+            logger.info("%s. Name : %s, Count %s, Total duration : %s ms, Avg duration : %s ms%n " +
+                    "Young Generation " + youngGenName + " " + youngGenList.size() + " " + youngGenDuration + " " + averageYoungGenDuration);
         }
 
         if (!oldGenList.isEmpty()) {
-            String olgGenName = oldGenList.get(0).getName();
+            final String olgGenName = oldGenList.get(0).getName();
             long oldGenDuration = 0;
             for (GcStats stats : oldGenList) {
                 oldGenDuration += stats.getDuration();
             }
-            long averageOldGenDuration = oldGenDuration / oldGenList.size();
-            System.out.println(String.format("%s. Name : %s, Count %s, Total duration : %s ms, Avg duration : %s ms",
-                    "Old Generation", olgGenName, oldGenList.size(), oldGenDuration, averageOldGenDuration));
+            final long averageOldGenDuration = oldGenDuration / oldGenList.size();
+            logger.info("%s. Name : %s, Count %s, Total duration : %s ms, Avg duration : %s ms " +
+                    "Old Generation " + " " + olgGenName + " " + oldGenList.size() + " " + oldGenDuration + " " + averageOldGenDuration);
 
         }
         youngGenList.clear();
