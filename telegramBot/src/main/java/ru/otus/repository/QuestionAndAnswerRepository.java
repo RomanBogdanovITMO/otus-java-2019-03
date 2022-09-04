@@ -7,8 +7,9 @@ import ru.otus.model.QuestionAndAnswer;
 
 @Repository
 public interface QuestionAndAnswerRepository extends MongoRepository<QuestionAndAnswer, Integer> {
-    public QuestionAndAnswer findByQuestion(String question);
 
-    public QuestionAndAnswer findById(int id);
+    QuestionAndAnswer findByQuestion(final String question);
+
+    QuestionAndAnswer findById(final int id);
 
 }

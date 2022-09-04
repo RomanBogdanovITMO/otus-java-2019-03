@@ -17,6 +17,13 @@
         <module>hw06_ATM</module>
         <module>hw07_ATM_Departament</module>
         <module>hw08_json</module>
+        <module>hw09_jdbc</module>
+        <module>hw12_webserver</module>
+        <module>telegramBot</module>
+        <module>hw15_messagesystem01</module>
+        <module>hw10_hibernate</module>
+        <module>hw11_cachee01</module>
+        <module>hw14_01_thread</module>
 
 
     </modules>

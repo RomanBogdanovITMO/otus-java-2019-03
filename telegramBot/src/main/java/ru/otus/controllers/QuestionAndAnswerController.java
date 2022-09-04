@@ -1,6 +1,6 @@
 package ru.otus.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,13 +10,15 @@ import ru.otus.servis.SequenceGeneratorService;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class QuestionAndAnswerController {
-    @Autowired
-    private SequenceGeneratorService service;
+
+
+    private final SequenceGeneratorService service;
 
     @RequestMapping("/create")
     public String create(@RequestParam String question, @RequestParam String answer, @RequestParam String info) {
-        QuestionAndAnswer andAnswer = service.create(question, answer, info);
+        final QuestionAndAnswer andAnswer = service.create(question, answer, info);
         return andAnswer.toString();
     }
 
@@ -27,7 +29,7 @@ public class QuestionAndAnswerController {
 
     @RequestMapping("/update")
     public String update(@RequestParam int id, @RequestParam String question, @RequestParam String answer, @RequestParam String info) {
-        QuestionAndAnswer questionAndAnswer = service.updateById(id, question, answer, info);
+        final QuestionAndAnswer questionAndAnswer = service.updateById(id, question, answer, info);
         return questionAndAnswer.toString();
     }
 

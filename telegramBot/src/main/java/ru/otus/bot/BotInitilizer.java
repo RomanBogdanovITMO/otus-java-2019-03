@@ -1,25 +1,16 @@
 package ru.otus.bot;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.TelegramBotsApi;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
-
 
 @Component
+@RequiredArgsConstructor
 public class BotInitilizer {
 
-    private TelegramBotsApi telegramBotsApi;
-    private BagBot bagBot;
+    private final TelegramBotsApi telegramBotsApi;
+    private final BagBot bagBot;
 
 
-    @Autowired
-    public BotInitilizer(BagBot bagBot, TelegramBotsApi telegramBotsApi) {
-        try {
-            telegramBotsApi.registerBot(bagBot);
-        } catch (TelegramApiException ex) {
-            ex.printStackTrace();
-        }
-
-    }
 }

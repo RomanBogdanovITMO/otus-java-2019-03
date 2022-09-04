@@ -1,6 +1,7 @@
 package ru.otus.servis;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
@@ -17,19 +18,18 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class SequenceGeneratorService {
-    private MongoOperations mongoOperations;
-    @Autowired
-    private QuestionAndAnswerRepository repository;
 
-    @Autowired
-    public SequenceGeneratorService(MongoOperations mongoOperations) {
-        this.mongoOperations = mongoOperations;
-    }
+    private final MongoOperations mongoOperations;
+    private final QuestionAndAnswerRepository repository;
 
-    public long generateSequence(String seqName) {
 
-        DatabaseSequence counter = mongoOperations.findAndModify(query(where("_id").is(seqName)),
+    public long generateSequence(final String seqName) {
+        log.info("execute method generateSequence(): {}", seqName);
+
+        final DatabaseSequence counter = mongoOperations.findAndModify(query(where("_id").is(seqName)),
                 new Update().inc("seq", 1), options().returnNew(true).upsert(true),
                 DatabaseSequence.class);
         return !Objects.isNull(counter) ? counter.getSeq() : 1;
@@ -37,41 +37,60 @@ public class SequenceGeneratorService {
     }
 
     //добовляем модель в бд
-    public QuestionAndAnswer create(String question, String answer, String info) {
-        return repository.save(new QuestionAndAnswer(generateSequence(QuestionAndAnswer.SEQUENCE_NAME), question, answer, info));
+    public QuestionAndAnswer create(final String question, final String answer, final String info) {
+        log.info("execute method create: {}, {}, {}", question, answer, info);
+
+        return repository.save(QuestionAndAnswer.builder()
+                .id(generateSequence(QuestionAndAnswer.SEQUENCE_NAME))
+                .question(question)
+                .answer(answer)
+                .additionInfo(info)
+                .build());
     }
 
     //выбираем все модели в бд
     public List<QuestionAndAnswer> getAll() {
+        log.info("execute method getAll: ");
+
         return repository.findAll();
     }
 
     //находим нужный обьект по вопросу, изменяем и обновляем бд
-    public QuestionAndAnswer update(String question, String answer, String info) {
-        QuestionAndAnswer questionAndAnswer = repository.findByQuestion(question);
+    public QuestionAndAnswer update(final String question, final String answer, final String info) {
+        log.info("execute method update: {}, {}, {}", question, answer, info);
+
+        final QuestionAndAnswer questionAndAnswer = repository.findByQuestion(question);
         questionAndAnswer.setQuestion(question);
         questionAndAnswer.setAnswer(answer);
         questionAndAnswer.setAdditionInfo(info);
+
         return repository.save(questionAndAnswer);
     }
 
     //находим нужный обьект по ID, изменяем и обновляем бд.
-    public QuestionAndAnswer updateById(int id, String question, String answer, String info) {
-        QuestionAndAnswer questionAndAnswer = repository.findById(id);
+    public QuestionAndAnswer updateById(final int id, final String question, final String answer, final String info) {
+        log.info("execute method updateById: {}", id);
+
+        final QuestionAndAnswer questionAndAnswer = repository.findById(id);
         questionAndAnswer.setQuestion(question);
         questionAndAnswer.setAnswer(answer);
         questionAndAnswer.setAdditionInfo(info);
+
         return repository.save(questionAndAnswer);
     }
 
     //удалить все модели в бд
     public void deleteAll() {
+        log.info("execute method deleteAll: ");
+
         repository.deleteAll();
     }
 
     //удалить выбранную модель
     public void delete(int id) {
-        QuestionAndAnswer questionAndAnswer = repository.findById(id);
+        log.info("execute method delete: ");
+
+        final QuestionAndAnswer questionAndAnswer = repository.findById(id);
         repository.delete(questionAndAnswer);
     }
 }

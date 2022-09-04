@@ -1,33 +1,19 @@
 package ru.otus.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 //генерация ID
 @Document(collection = "database_sequences")
+@Data
+@AllArgsConstructor
 public class DatabaseSequence {
+
     @Id
     private String id;
 
     private long seq;
 
-    public DatabaseSequence() {
-
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public long getSeq() {
-        return seq;
-    }
-
-    public void setSeq(long seq) {
-        this.seq = seq;
-    }
 }
