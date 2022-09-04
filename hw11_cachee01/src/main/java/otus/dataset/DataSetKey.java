@@ -1,4 +1,4 @@
-package ru.otus.dataset;
+package otus.dataset;
 
 public class DataSetKey {
     private final Class<?> type;

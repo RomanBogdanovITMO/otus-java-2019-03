@@ -1,8 +1,10 @@
-package ru.otus.db;
+package otus.db;
 
-import ru.otus.dataset.UserDataSet;
+import otus.dataset.UserDataSet;
 
 public interface DBService {
+
     void create(UserDataSet dataSet);
+
     UserDataSet load(long id);
 }

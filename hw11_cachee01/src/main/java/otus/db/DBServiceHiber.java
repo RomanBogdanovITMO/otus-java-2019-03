@@ -1,4 +1,4 @@
-package ru.otus.db;
+package otus.db;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -8,21 +8,24 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import ru.otus.dao.UserDAO;
-import ru.otus.dataset.AddressDataSet;
-import ru.otus.dataset.PhoneDataSet;
-import ru.otus.dataset.UserDataSet;
+import otus.dao.UserDAO;
+import otus.dataset.AddressDataSet;
+import otus.dataset.PhoneDataSet;
+import otus.dataset.UserDataSet;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.logging.Logger;
 
 public class DBServiceHiber {
+
+    static Logger logger = Logger.getLogger(DBServiceHiber.class.getName());
+
     private final SessionFactory sessionFactory;
 
     public DBServiceHiber() {
-        Configuration configuration = new Configuration()
-                .configure("hibernat.xml");
-        Metadata metadata = new MetadataSources(createServiceRegistry(configuration))
+        final Configuration configuration = new Configuration()
+                .configure("hibernate.xml");
+        final Metadata metadata = new MetadataSources(createServiceRegistry(configuration))
                 .addAnnotatedClass(UserDataSet.class)
                 .addAnnotatedClass(PhoneDataSet.class)
                 .addAnnotatedClass(AddressDataSet.class)
@@ -32,13 +35,16 @@ public class DBServiceHiber {
 
     }
 
-    private static StandardServiceRegistry createServiceRegistry(Configuration configuration){
-        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+    private static StandardServiceRegistry createServiceRegistry(final Configuration configuration){
+        logger.info("execute method createServiceRegistry: ");
+
+        return new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties()).build();
-        return serviceRegistry;
     }
 
-    public void create(UserDataSet dataSet) {
+    public void create(final UserDataSet dataSet) {
+        logger.info("execute method create: ");
+
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.save(dataSet);
@@ -46,29 +52,29 @@ public class DBServiceHiber {
         }
     }
 
-    public UserDataSet load(long id) {
+    public UserDataSet load(final long id) {
+        logger.info("execute method load: ");
+
         return runInSession(session -> {
-            UserDAO dao = new UserDAO(session);
+            final UserDAO dao = new UserDAO(session);
             return dao.load(id);
         });
 
     }
     public String getLocalStatus() {
+        logger.info("execute method getLocalStatus: ");
+
         return runInSession(session -> {
             return session.getTransaction().getStatus().name();
         });
     }
-    private void runInSession(Consumer<Session> consumer) {
+
+    private <R> R runInSession(final Function<Session, R> function) {
+        logger.info("execute method runInSession: ");
+
         try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            consumer.accept(session);
-            transaction.commit();
-        }
-    }
-    private <R> R runInSession(Function<Session, R> function) {
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            R result = function.apply(session);
+            final Transaction transaction = session.beginTransaction();
+            final R result = function.apply(session);
             transaction.commit();
             return result;
         }

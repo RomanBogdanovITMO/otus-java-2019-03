@@ -1,10 +1,7 @@
-package ru.otus.cache;
+package otus.cache;
 
 import java.lang.ref.SoftReference;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.function.Function;
 
 public class CacheEngineImpl<K, V> implements CacheEngine<K,V> {
@@ -65,48 +62,48 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K,V> {
     }
 
     @Override
-    public void put(K key, V value) {
+    public void put(final K key, final V value) {
         if (elements.size() == maxElements) {
-            K firstKey = elements.keySet().iterator().next();
+            final K firstKey = elements.keySet().iterator().next();
             elements.remove(firstKey);
         }
         elements.put(key, new SoftReference<>(new MyElement<>(key, value)));
         setTimerTask(key);
     }
 
-    private void setTimerTask(K key) {
+    private void setTimerTask(final K key) {
         if (!isEternal) {
             if (lifeTimeMs != 0) {
-                TimerTask lifeTimerTask = getTimerTask(key, lifeElement -> lifeElement.getCreationTime() + lifeTimeMs);
+                final TimerTask lifeTimerTask = getTimerTask(key, lifeElement -> lifeElement.getCreationTime() + lifeTimeMs);
                 timer.schedule(lifeTimerTask, lifeTimeMs);
             }
             if (idleTimeMs != 0) {
-                TimerTask idleTimerTask = getTimerTask(key, idleElement -> idleElement.getLastAccessTime() + idleTimeMs);
+                final TimerTask idleTimerTask = getTimerTask(key, idleElement -> idleElement.getLastAccessTime() + idleTimeMs);
                 timer.schedule(idleTimerTask, idleTimeMs, idleTimeMs);
             }
         }
     }
 
-    private TimerTask getTimerTask(final K key, Function<MyElement<K, V>, Long> timeFunction) {
+    private TimerTask getTimerTask(final K key, final Function<MyElement<K, V>, Long> timeFunction) {
         return new TimerTask() {
             @Override
             public void run() {
-                MyElement<K, V> element = getElement(key);
-                if (element == null || isT1beforeT2(timeFunction.apply(element), System.currentTimeMillis()))
+                final MyElement<K, V> element = getElement(key);
+                if (Objects.isNull(element) || isT1beforeT2(timeFunction.apply(element), System.currentTimeMillis()))
                     elements.remove(key);
                 this.cancel();
             }
         };
     }
 
-    private boolean isT1beforeT2(long t1, long t2) {
+    private boolean isT1beforeT2(final long t1, final long t2) {
         return t1 < t2 + TIME_THRESHOLD_MS;
     }
 
     @Override
-    public V get(K key) {
-        MyElement<K, V> element = getElement(key);
-        if (element != null) {
+    public V get(final K key) {
+        final MyElement<K, V> element = getElement(key);
+        if (Objects.nonNull(element)) {
             hit++;
             element.setAccessed();
             return element.getValue();
@@ -116,9 +113,9 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K,V> {
         }
     }
 
-    private MyElement<K, V> getElement(K key) {
-        SoftReference<MyElement<K, V>> softReference = elements.get(key);
-        if (softReference != null)
+    private MyElement<K, V> getElement(final K key) {
+        final SoftReference<MyElement<K, V>> softReference = elements.get(key);
+        if (Objects.nonNull(softReference))
             return softReference.get();
         return null;
     }
@@ -131,11 +128,6 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K,V> {
     @Override
     public long getLifeTimeMs() {
         return lifeTimeMs;
-    }
-
-    @Override
-    public long getIdleTimeMs() {
-        return idleTimeMs;
     }
 
     @Override

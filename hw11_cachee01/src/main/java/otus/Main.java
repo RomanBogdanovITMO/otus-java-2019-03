@@ -1,10 +1,6 @@
-package ru.otus;
-
- hw12_webe-server
+package otus;
 
 
-
- hw01-maven
 public class Main {
     public static void main(String[] args) {
 

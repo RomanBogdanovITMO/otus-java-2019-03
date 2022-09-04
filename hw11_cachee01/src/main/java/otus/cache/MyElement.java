@@ -1,6 +1,12 @@
-package ru.otus.cache;
+package otus.cache;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
+@Data
+@Builder
+@AllArgsConstructor
 public class MyElement<K,V>  {
 
     private final K key;
@@ -18,22 +24,6 @@ public class MyElement<K,V>  {
 
     protected long getCurrentTime() {
         return System.currentTimeMillis();
-    }
-
-    public K getKey() {
-        return key;
-    }
-
-    public V getValue() {
-        return value;
-    }
-
-    public long getCreationTime() {
-        return creationTime;
-    }
-
-    public long getLastAccessTime() {
-        return lastAccessTime;
     }
 
     public void setAccessed() {

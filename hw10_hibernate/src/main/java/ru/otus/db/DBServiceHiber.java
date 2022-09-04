@@ -9,7 +9,6 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-import ru.otus.Main;
 import ru.otus.dao.UserDAO;
 import ru.otus.dataset.AddressDataSet;
 import ru.otus.dataset.PhoneDataSet;
@@ -21,7 +20,7 @@ import java.util.logging.Logger;
 
 public class DBServiceHiber {
 
-    static Logger logger = Logger.getLogger(Main.class.getName());
+    static Logger logger = Logger.getLogger(DBServiceHiber.class.getName());
     private final SessionFactory sessionFactory;
 
     public DBServiceHiber() {

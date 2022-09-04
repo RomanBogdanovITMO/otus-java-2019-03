@@ -1,6 +1,4 @@
-package ru.otus.cache;
-
-
+package otus.cache;
 
 public interface CacheEngine<K, V> {
     void put(K key, V value);
@@ -8,19 +6,9 @@ public interface CacheEngine<K, V> {
     V get(K key);
 
     int getMaxElements();
- hw12_webe-server
 
     long getLifeTimeMs();
 
-    long getIdleTimeMs();
-
-
-
-    long getLifeTimeMs();
-
-    long getIdleTimeMs();
-
- hw01-maven
     boolean isEternal();
 
     int getHitCount();
@@ -28,8 +16,4 @@ public interface CacheEngine<K, V> {
     int getMissCount();
 
     void dispose();
- hw12_webe-server
-
-
- hw01-maven
 }
