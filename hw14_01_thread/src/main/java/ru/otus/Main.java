@@ -5,11 +5,11 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         int count = 0;
         int count2 = 0;
-        CounterSynchronized1 counterSynchronized1 = new CounterSynchronized1();
+        final CounterSynchronized1 counterSynchronized1 = new CounterSynchronized1();
 
-        Thread t1 = new Thread(() -> counterSynchronized1.inc(count));
+        final Thread t1 = new Thread(() -> counterSynchronized1.inc(count));
 
-        Thread t2 = new Thread(() -> counterSynchronized1.inc(count2));
+        final Thread t2 = new Thread(() -> counterSynchronized1.inc(count2));
         t1.start();
         t2.start();
 
