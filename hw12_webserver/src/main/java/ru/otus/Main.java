@@ -1,6 +1,7 @@
 package ru.otus;
 
 
+import lombok.AllArgsConstructor;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
@@ -22,35 +23,34 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Objects;
 
-
+@AllArgsConstructor
 public class Main {
-    private final static int PORT = 8080;
-    private SessionFactory sessionFactory;
 
-    public Main(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    private final static int PORT = 8080;
+    private final SessionFactory sessionFactory;
+
 
     public static void main(String[] args) throws Exception {
-        DBServiceHiber dbServiceHiber = new DBServiceHiber();
+        final DBServiceHiber dbServiceHiber = new DBServiceHiber();
         new Main(dbServiceHiber.getSessionFactory()).start();
     }
 
     private void start() throws Exception {
-        Server server = createServer(PORT);
+        final Server server = createServer();
         server.start();
         server.join();
     }
 
-    public Server createServer(int port) throws MalformedURLException {
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+    private Server createServer() throws MalformedURLException {
+        final ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(new UsersServlet(sessionFactory)), "/userInfo");
         context.addServlet(new ServletHolder(new AddUserServlet(sessionFactory)),"/userADD");
-        Server server = new Server(port);
+        final Server server = new Server(Main.PORT);
         server.setHandler(new HandlerList(context));
 
-        HandlerList handlers = new HandlerList();
+        final HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[]{createResourceHandler(),createSecurityHandler(context)});
         server.setHandler(handlers);
         return server;
@@ -58,42 +58,41 @@ public class Main {
     }
 
     private ResourceHandler createResourceHandler() {
-        ResourceHandler resourceHandler = new ResourceHandler();
+        final ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(false);
         resourceHandler.setWelcomeFiles(new String[]{"index.html"});
 
-        URL fileDir = Main.class.getClassLoader().getResource("static");
-        if (fileDir == null) {
+        final URL fileDir = Main.class.getClassLoader().getResource("static");
+        if (Objects.isNull(fileDir)) {
             throw new RuntimeException("File Directory not found");
         }
         resourceHandler.setResourceBase(fileDir.getPath());
         return resourceHandler;
     }
 
-    private SecurityHandler createSecurityHandler(ServletContextHandler context) throws MalformedURLException {
-        Constraint constraint = new Constraint();
+    private SecurityHandler createSecurityHandler(final ServletContextHandler context) throws MalformedURLException {
+        final Constraint constraint = new Constraint();
         constraint.setName("auth");
         constraint.setAuthenticate(true);
         constraint.setRoles(new String[]{"user", "admin"});
 
-        ConstraintMapping mapping = new ConstraintMapping();
+        final ConstraintMapping mapping = new ConstraintMapping();
         mapping.setPathSpec("/userADD/*");
         mapping.setConstraint(constraint);
 
-        ConstraintSecurityHandler security = new ConstraintSecurityHandler();
+        final ConstraintSecurityHandler security = new ConstraintSecurityHandler();
         security.setAuthenticator(new BasicAuthenticator());
 
         URL propFile = null;
-        File realmFile = new File("./src/main/resources/cfg/real.properties");
+        final File realmFile = new File("./src/main/resources/cfg/real.properties");
         if (realmFile.exists()) {
             propFile = realmFile.toURI().toURL();
         }
-        if (propFile == null) {
-            System.out.println("local realm config not found, looking into Resources");
+        if (Objects.isNull(propFile)) {
             propFile = Main.class.getClassLoader().getResource("real.properties");
         }
 
-        if (propFile == null) {
+        if (Objects.isNull(propFile)) {
             throw new RuntimeException("Realm property file not found");
         }
 

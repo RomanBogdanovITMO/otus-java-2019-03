@@ -1,9 +1,16 @@
 package ru.otus.dataset;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Embeddable
 @Entity
+@Data
+@Builder
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "address")
 public class AddressDataSet  {
 
@@ -14,41 +21,8 @@ public class AddressDataSet  {
     @Column(name = "address_street")
     private String street;
 
+    @ToString.Exclude
     @OneToOne(mappedBy = "address")
     private UserDataSet userDataSet;
 
-    public AddressDataSet() {
-    }
-
-    public AddressDataSet(String street) {
-        this.street = street;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public UserDataSet getUserDataSet() {
-        return userDataSet;
-    }
-
-    public void setUserDataSet(UserDataSet userDataSet) {
-        this.userDataSet = userDataSet;
-    }
-
-    @Override
-    public String toString() {
-        return "AddressDataSet{" +
-                "id=" + id +
-                ", street='" + street + '\'' +
-                '}';
-    }
 }
